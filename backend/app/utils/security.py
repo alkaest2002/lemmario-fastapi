@@ -1,0 +1,58 @@
+import os
+from datetime import datetime, timedelta
+
+from fastapi import HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+from passlib.context import CryptContext
+from jose import JWTError, jwt
+
+from data.schemas.tokens import TokenPayload
+
+
+class PasswordManager():
+  def __init__(self):
+    self.password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+  def verify_password(self, password: str, hashed_pass: str) -> bool:
+    return self.password_context.verify(password, hashed_pass)
+
+class TokenMaker():
+  def __init__(self, token_subject: str):
+    self.token_subject = token_subject
+    self.access_token_expiration = timedelta(minutes=30)
+    self.refresh_token_expiration = timedelta(days=7)
+    self.token_algorithm = "HS256"
+    self.jwt_secret_key = os.getenv("JWT_SECRET_KEY")
+
+  def _create_token(self, expiration: timedelta) -> str:
+    to_encode = {"exp": datetime.utcnow() + expiration, "sub": self.token_subject}
+    return jwt.encode(to_encode, self.jwt_secret_key, algorithm=self.token_algorithm)
+
+  def create_access_token(self) -> str:
+    return self._create_token(self.access_token_expiration)
+
+  def create_refresh_token(self) -> str:
+    return self._create_token(self.refresh_token_expiration)
+
+class JWTBearer(HTTPBearer):
+  def __init__(self, auto_error: bool = True, algorithms: list[str] = "HS256"):
+    super(JWTBearer, self).__init__(auto_error=auto_error)
+    self.algorithms = algorithms
+    self.jwt_secret_key = os.getenv("JWT_SECRET_KEY")
+
+  async def __call__(self, request: Request) -> str:
+    credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+    if not credentials:
+      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Credentials were not provided.")
+    if not credentials.scheme == "Bearer":
+      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authentication scheme.")
+    return self.verify_token(credentials.credentials)      
+
+  def verify_token(self, token: str) -> str:
+    try:
+      payload = jwt.decode(token, self.jwt_secret_key, algorithms=self.algorithms)
+      token_payload = TokenPayload(**payload)
+    except JWTError:
+      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token or expired token.")
+    return token_payload.dict()["sub"]
