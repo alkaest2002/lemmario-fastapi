@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from dependencies.deps_db import get_db
+from dependencies.db import get_db
 from data.database.crud import lemmi as Tbl
 from utils.security import JWTBearer
 
