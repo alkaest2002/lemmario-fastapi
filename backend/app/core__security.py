@@ -12,7 +12,7 @@ from schemas__tokens  import TokenPayload
 
 from core__config import settings
 
-password_context  = CryptContext(schemes=["bcrypt"], deprecated="auto")
+password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @dataclass
