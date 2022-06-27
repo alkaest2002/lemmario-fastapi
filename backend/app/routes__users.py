@@ -1,9 +1,10 @@
-import os
 from fastapi import APIRouter, status, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from schemas__tokens import TokenSchema
 
 from core__security import (TokenMaker, PasswordManager)
+
+from core__config import settings
 
 router = APIRouter(prefix="/utenti",)
 
@@ -12,7 +13,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
   
   # unpack data
   (username, password) = (form_data.username, form_data.password)
-  (admin_email, admin_password) = (os.getenv("ADMIN_EMAIL"), os.getenv("ADMIN_HASHED_PASS"))
+  (admin_email, admin_password) = (settings.ADMIN_EMAIL, settings.ADMIN_HASHED_PASS)
   
   # verify email
   if username != admin_email:
