@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timedelta
 
 from dataclasses import dataclass
@@ -9,11 +8,16 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 
-from data.schemas.tokens import TokenPayload
+from schemas__tokens  import TokenPayload
+
+from core__config import settings
+
+password_context  = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 @dataclass
 class PasswordManager():
-  password_context: CryptContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
+  password_context: CryptContext = password_context
 
   def verify_password(self, password: str, hashed_pass: str) -> bool:
     return self.password_context.verify(password, hashed_pass)
@@ -24,7 +28,7 @@ class TokenMaker():
   access_token_expiration: timedelta = timedelta(minutes=30)
   refresh_token_expiration: timedelta = timedelta(days=7)
   token_algorithm: str = "HS256"
-  jwt_secret_key: str = os.getenv("JWT_SECRET_KEY")
+  jwt_secret_key: str = settings.JWT_SECRET_KEY
 
   def _create_token(self, expiration: timedelta) -> str:
     to_encode = {"exp": datetime.utcnow() + expiration, "sub": self.token_subject}
@@ -41,7 +45,7 @@ class JWTBearer(HTTPBearer):
   def __init__(self, auto_error: bool = True, algorithms: list[str] = "HS256"):
     super(JWTBearer, self).__init__(auto_error=auto_error)
     self.algorithms = algorithms
-    self.jwt_secret_key = os.getenv("JWT_SECRET_KEY")
+    self.jwt_secret_key = settings.JWT_SECRET_KEY
 
   async def __call__(self, request: Request) -> str:
     # retrieve credentials

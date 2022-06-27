@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from data.database.models.lemmi import Lemma as Tbl
-from data.schemas.lemmi import Lemma as Lemma_schema
+from models__lemmi import Lemma as Tbl
+from schemas__lemmi import Lemma as Lemma_schema
 
 
 def get_lemma(db: Session, lemma: str):

@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from dependencies.db import get_db
-from data.database.crud import lemmi as Tbl
-from utils.security import JWTBearer
+from dependency__db import get_db
+from core__security import JWTBearer
+
+import crud__lemmi as Tbl
 
 router = APIRouter(prefix="/lemmi",)
 

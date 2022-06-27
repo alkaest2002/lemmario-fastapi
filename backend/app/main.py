@@ -1,20 +1,17 @@
-from dotenv import load_dotenv
-load_dotenv()
-
 from fastapi import FastAPI
 
-from data.database.models import lemmi as models
-from data.database.db_init import engine
+from database__init_db import engine
+from models__lemmi import Base
 
-from routers import lemmi as routes_lemmi
-from routers import users as routes_users
+import routes__lemmi
+import routes__users
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.include_router(routes_lemmi.router)
-app.include_router(routes_users.router)
+app.include_router(routes__lemmi.router)
+app.include_router(routes__users.router)
 
 @app.get("/")
 def get_root():
