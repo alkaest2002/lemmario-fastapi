@@ -7,17 +7,18 @@ from core__security import JWTBearer
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as Tbl
+from schemas__lemmi import LemmaOut
 
 router = APIRouter(prefix="/lemmi",)
 
 
-@router.get("")
+@router.get("", response_model=LemmaOut)
 async def get_lemmi(
 	offset: int | str | None = None, 
-	page_size: int = 5, 
-	page_dir: PageDirEnum = PageDirEnum.next,
 	order_by: FieldEnum = FieldEnum.lemma,
 	order_dir: OrderDirEnum = OrderDirEnum.asc,
+	page_dir: PageDirEnum = PageDirEnum.next,
+	page_size: int = 5, 
 	db: Session = Depends(get_db), 
 	_: str = Depends(JWTBearer())
 ):
@@ -26,8 +27,8 @@ async def get_lemmi(
 		offset=offset, 
 		order_by=order_by,
 		order_dir=order_dir,
-		page_size=page_size+1,
 		page_dir=page_dir, 
+		page_size=page_size+1,
 	)
 	data_to_return = dict(
 		data=lemmi, 
@@ -35,8 +36,8 @@ async def get_lemmi(
 			offset=offset if len(lemmi) == page_size+1 else None,
 			order_by=order_by,
 			order_dir=order_dir,
-			page_size=page_size,
-			page_dir=page_dir
+			page_dir=page_dir,
+			page_size=page_size
 		)
 	)
 	return data_to_return
