@@ -7,7 +7,6 @@ class FieldEnum(str, Enum):
 class PageDirEnum(str, Enum):
   next = "NEXT"
   prev = "PREV"
-  lenet = "lenet"
 
 class OrderDirEnum(str, Enum):
   asc = "ASC"

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from dependency__db import get_db
 from core__security import JWTBearer
-from core_enums import FieldEnum, PageDirEnum
+from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as Tbl
 
@@ -17,22 +17,25 @@ async def get_lemmi(
 	page_size: int = 5, 
 	page_dir: PageDirEnum = PageDirEnum.next,
 	order_by: FieldEnum = FieldEnum.lemma,
+	order_dir: OrderDirEnum = OrderDirEnum.asc,
 	db: Session = Depends(get_db), 
 	_: str = Depends(JWTBearer())
 ):
 	lemmi = Tbl.get_lemmi(
 		db=db, 
 		offset=offset, 
+		order_by=order_by,
+		order_dir=order_dir,
 		page_size=page_size+1,
 		page_dir=page_dir, 
-		order_by=order_by,
 	)
 	data_to_return = dict(
 		data=lemmi, 
 		metadata=dict(
 			offset=offset if len(lemmi) == page_size+1 else None,
-			page_size=page_size,
 			order_by=order_by,
+			order_dir=order_dir,
+			page_size=page_size,
 			page_dir=page_dir
 		)
 	)
