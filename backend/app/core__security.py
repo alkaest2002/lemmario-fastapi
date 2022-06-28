@@ -25,8 +25,8 @@ class PasswordManager():
 @dataclass
 class TokenMaker():
   token_subject: str
-  access_token_expiration: timedelta = timedelta(minutes=30)
-  refresh_token_expiration: timedelta = timedelta(days=7)
+  access_token_expiration: timedelta = timedelta(days=30)
+  refresh_token_expiration: timedelta = timedelta(days=90)
   token_algorithm: str = "HS256"
   jwt_secret_key: str = settings.JWT_SECRET_KEY
 

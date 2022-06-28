@@ -16,6 +16,6 @@ app.include_router(routes__users.router)
 @app.get("/")
 def get_root():
   return {
-    "welcome": "lemmario api"
+    "message": "Welcome. Lemmario's API"
   }
 
