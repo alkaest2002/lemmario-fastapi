@@ -43,12 +43,11 @@ async def get_lemmi(
 	)
 	return data_to_return
 	
-@router.get("/{lemma}")
+@router.get("/view/{lemma}")
 async def get_lemma(lemma: str, db: Session = Depends(get_db), _: str = Depends(JWTBearer())):
 	lemma = Tbl.get_lemma(db=db, lemma=lemma)
 	return lemma
 
 @router.get("/search/{lemma}")
 async def search_lemma(lemma: str, _: str = Depends(JWTBearer())):
-	scraper = Scaprer(lemma)
-	return scraper.scrape()
+	return Scaprer(lemma).scrape()

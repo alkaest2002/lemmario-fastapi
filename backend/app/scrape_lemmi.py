@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from schemas__lemmi import LemmaSearch
 
+
 URL = "https://www.treccani.it/vocabolario/ricerca"
 
 class Scaprer():
@@ -16,29 +17,25 @@ class Scaprer():
     cleaned_text = re.sub(r"\n|\s{2,}", " ", cleaned_text)
     return cleaned_text.strip()
 
-  def _process_data(self, occurences)-> str:
+  def _process_data(self, occurences) -> str:
     result = []
     for found_lemma in occurences:
-      title_elm = found_lemma.find("h2", class_="search_preview-title")
-      abstract_elm = found_lemma.find("div", class_="abstract")
-      definition = self._clean_text(abstract_elm.getText())
+      title_element = found_lemma.find("h2", class_="search_preview-title")
+      abstract_element = found_lemma.find("div", class_="abstract")
+      definition = self._clean_text(abstract_element.getText())
       definition = re.sub("\s\.\.\.\sLeggi\sTutto", "", definition)
-      lemma = re.sub("\d", "", self._clean_text(title_elm.text)).lower()
+      lemma = self._clean_text(title_element.text).lower()
+      lemma = re.sub("\d", "", lemma)
       lemmaWithoutAccents = definition[:len(lemma)]
-      link = self._clean_text(abstract_elm.find("a")["href"])
+      link = self._clean_text(abstract_element.find("a")["href"])
       result.append(
-        LemmaSearch(**dict(
-          lemma=lemma, 
-          lemmaWithoutAccents=lemmaWithoutAccents, 
-          link=link, 
-          definition=definition)
-        ))
+        LemmaSearch(**dict(lemma=lemma, lemmaWithoutAccents=lemmaWithoutAccents, link=link, definition=definition))
+      )
     return result
 
   def scrape(self):
     page = requests.get(f"{URL}/{self.lemma}/")
     soup = BeautifulSoup(page.content, "html.parser")
-    occurences = soup.find("div", class_="treccani-container-left_container")\
-        .find_all("section", class_="module-article-search_preview")
+    occurences = soup.find("div", class_="treccani-container-left_container").find_all("section", class_="module-article-search_preview")
     if len(occurences) > 0: return self._process_data(occurences)
     return []
