@@ -26,3 +26,9 @@ class LemmaOut(BaseModel):
 	
 class LemmaCreate(LemmaBase):
 	pass
+
+class LemmaSearch(BaseModel):
+	lemma: str
+	lemmaWithoutAccents: str
+	link: str
+	definition: str
