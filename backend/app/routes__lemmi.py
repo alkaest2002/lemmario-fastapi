@@ -6,14 +6,14 @@ from dependency__db import get_db
 from core__security import JWTBearer
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
-import crud__lemmi as Tbl
+import crud__lemmi as lemmi_crud
 from schemas__lemmi import LemmaOut
 from scrape_lemmi import Scaprer
 
 router = APIRouter(prefix="/lemmi",)
 
 
-@router.get("", response_model=LemmaOut)
+@router.get("/list", response_model=LemmaOut)
 async def get_lemmi(
 	offset: int | str | None = None, 
 	order_by: FieldEnum = FieldEnum.lemma,
@@ -23,7 +23,7 @@ async def get_lemmi(
 	db: Session = Depends(get_db), 
 	_: str = Depends(JWTBearer())
 ):
-	lemmi = Tbl.get_lemmi(
+	lemmi = lemmi_crud.get_lemmi(
 		db=db, 
 		offset=offset, 
 		order_by=order_by,
@@ -45,9 +45,13 @@ async def get_lemmi(
 	
 @router.get("/view/{lemma}")
 async def get_lemma(lemma: str, db: Session = Depends(get_db), _: str = Depends(JWTBearer())):
-	lemma = Tbl.get_lemma(db=db, lemma=lemma)
+	lemma = lemmi_crud.get_lemma(db=db, lemma=lemma)
 	return lemma
 
 @router.get("/search/{lemma}")
 async def search_lemma(lemma: str, _: str = Depends(JWTBearer())):
-	return Scaprer(lemma).scrape()
+	return Scaprer(lemma).scrape_search()
+
+@router.get("/lookup/{lemma}")
+async def lookup_lemma(lemma: str, _: str = Depends(JWTBearer())):
+	return Scaprer(lemma).scrape_lookup()

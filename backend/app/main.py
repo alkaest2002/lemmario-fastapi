@@ -6,7 +6,7 @@ from models__lemmi import Base
 import routes__lemmi
 import routes__users
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(engine)
 
 app = FastAPI()
 

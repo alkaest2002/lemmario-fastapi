@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from models__lemmi import Lemma as Tbl
-from schemas__lemmi import Lemma as Lemma_schema
+from models__lemmi import Lemma as TableLemmi
+from schemas__lemmi import Lemma as LemmaSchema
 
 from core_enums import PageDirEnum, OrderDirEnum
 
@@ -14,9 +14,9 @@ def get_lemmi(
 	page_size: int,
 ):
 	# init query
-	q = db.query(Tbl)
+	q = db.query(TableLemmi)
 	# define field to operate on
-	field = getattr(Tbl, order_by)
+	field = getattr(TableLemmi, order_by)
 	# add order by to query
 	if page_dir == PageDirEnum.next and order_dir == OrderDirEnum.asc: q = q.order_by(field)
 	if page_dir == PageDirEnum.prev and order_dir == OrderDirEnum.desc: q = q.order_by(field)
@@ -36,10 +36,10 @@ def get_lemmi(
 
 
 def get_lemma(db: Session, lemma: str):
-	return db.query(Tbl).filter(Tbl.lemma == lemma).first()
+	return db.query(TableLemmi).filter(TableLemmi.lemma == lemma).first()
 
 
-def create_lemma(db: Session, lemma: Lemma_schema):
+def create_lemma(db: Session, lemma: LemmaSchema):
 	db.commit()
 	db.add(lemma)
 	db.refresh(lemma)
