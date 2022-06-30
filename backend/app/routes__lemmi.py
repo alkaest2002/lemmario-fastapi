@@ -1,5 +1,4 @@
-from inspect import getargs
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 
 from dependency__db import get_db
@@ -7,7 +6,7 @@ from core__security import JWTBearer
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as lemmi_crud
-from schemas__lemmi import LemmaOut
+from schemas__lemmi import LemmaBase, LemmaOut
 from scrape_lemmi import Scaprer
 
 router = APIRouter(prefix="/lemmi",)
@@ -55,3 +54,8 @@ async def search_lemma(lemma: str, _: str = Depends(JWTBearer())):
 @router.get("/lookup/{lemma}")
 async def lookup_lemma(lemma: str, _: str = Depends(JWTBearer())):
 	return Scaprer(lemma).scrape_lookup()
+
+@router.post("/insert")
+async def insert_lemma(*,lemma: LemmaBase, db: Session = Depends(get_db), _: str = Depends(JWTBearer()), response: Response) -> LemmaBase:
+	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma, response=response)
+	return lemma

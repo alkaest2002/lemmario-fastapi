@@ -22,16 +22,12 @@ class LemmaMetadata(BaseModel):
 
 class LemmaOut(BaseModel):
 	data: list[Lemma]
-	metadata: LemmaMetadata
-	
-class LemmaCreate(LemmaBase):
-	pass
+	metadata: LemmaMetadata	
 
 class LemmaLookup(BaseModel):
 	lemma: str
 	definition: str
 
 class LemmaSearch(LemmaLookup):
-	lemmaWithoutAccents: str
 	link: str
 

@@ -1,7 +1,9 @@
+from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from models__lemmi import Lemma as TableLemmi
-from schemas__lemmi import Lemma as LemmaSchema
+from schemas__lemmi import LemmaBase
 
 from core_enums import PageDirEnum, OrderDirEnum
 
@@ -39,8 +41,11 @@ def get_lemma(db: Session, lemma: str):
 	return db.query(TableLemmi).filter(TableLemmi.lemma == lemma).first()
 
 
-def create_lemma(db: Session, lemma: LemmaSchema):
-	db.commit()
-	db.add(lemma)
-	db.refresh(lemma)
+def create_lemma(db: Session, lemma: LemmaBase):
+	data = TableLemmi(**lemma.dict())
+	try:
+		db.add(data)
+		db.commit()
+	except IntegrityError:
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"word '{lemma.lemma}' is already present in the database")
 	return lemma
