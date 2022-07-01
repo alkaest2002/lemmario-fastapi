@@ -1,17 +1,17 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from models__lemmi import Lemma
-from schemas__lemmi import LemmaBase
+from models__lemmi import LemmaModel
+from schemas__lemmi import LemmaSchema
 
 from core_enums import PageDirEnum, OrderDirEnum
 
 
-def get_lemmi(db: Session, offset: int | str | None, order_by: str, order_dir: str, page_dir: str, page_size: int) -> list[Lemma]:
+def get_lemmi(db: Session, offset: int | str | None, order_by: str, order_dir: str, page_dir: str, page_size: int) -> list[LemmaModel]:
 	# init query
-	q = db.query(Lemma)
+	q = db.query(LemmaModel)
 	# define field to operate on
-	field = getattr(Lemma, order_by)
+	field = getattr(LemmaModel, order_by)
 	# add order by to query
 	if page_dir == PageDirEnum.next and order_dir == OrderDirEnum.asc:
 		q = q.order_by(field)
@@ -38,12 +38,12 @@ def get_lemmi(db: Session, offset: int | str | None, order_by: str, order_dir: s
 	return records[::-1 if page_dir == PageDirEnum.prev else 1]
 
 
-def get_lemma(db: Session, lemma: str) -> Lemma:
-	return db.query(Lemma).filter(Lemma.lemma == lemma).first()
+def get_lemma(db: Session, lemma: str) -> LemmaModel:
+	return db.query(LemmaModel).filter(LemmaModel.lemma == lemma).first()
 
 
-def create_lemma(db: Session, lemma: LemmaBase) -> Lemma:
-	data = Lemma(**lemma.dict())
+def create_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
+	data = LemmaModel(**lemma.dict())
 	db.add(data)
 	db.commit()
 	return data

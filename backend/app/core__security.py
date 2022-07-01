@@ -8,7 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 
-from schemas__tokens import TokenPayload
+from schemas__tokens import TokenPayloadSchema
 
 from core__config import settings
 
@@ -65,7 +65,7 @@ class JWTBearer(HTTPBearer):
     try:
       payload = jwt.decode(token, self.jwt_secret_key,
                            algorithms=self.algorithms)
-      token_payload = TokenPayload(**payload)
+      token_payload = TokenPayloadSchema(**payload)
     except JWTError:
       raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                           detail="Invalid token or expired token.")

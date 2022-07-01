@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class LemmaBase(BaseModel):
+class LemmaSchema(BaseModel):
 	lemma: str
 	letter: str
 	definition: str
@@ -9,14 +9,14 @@ class LemmaBase(BaseModel):
 	updated: int
 
 
-class Lemma(LemmaBase):
+class LemmaORMSchema(LemmaSchema):
 	rowid: int
 
 	class Config:
 		orm_mode = True
 
 
-class LemmaSearchaMetadata(BaseModel):
+class LemmaSearchaMetadataSchema(BaseModel):
 	offset: int | str | None = None
 	order_by: str | None = None
 	order_dir: str | None = None
@@ -24,15 +24,15 @@ class LemmaSearchaMetadata(BaseModel):
 	page_size: int = 5
 
 
-class LemmaList(BaseModel):
-	data: list[Lemma]
-	metadata: LemmaSearchaMetadata
+class LemmaListSchema(BaseModel):
+	data: list[LemmaORMSchema]
+	metadata: LemmaSearchaMetadataSchema
 
 
-class LemmaLookup(BaseModel):
+class LemmaLookupSchema(BaseModel):
 	lemma: str
 	definition: str
 
 
-class LemmaSearch(LemmaLookup):
+class LemmaSearchSchema(LemmaLookupSchema):
 	link: str

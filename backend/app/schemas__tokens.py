@@ -6,6 +6,6 @@ class TokenSchema(BaseModel):
   refresh_token: str
 
 
-class TokenPayload(BaseModel):
+class TokenPayloadSchema(BaseModel):
   sub: str = None
   exp: int = None

@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String
 from database__init_db import Base
 
 
-class Lemma(Base):
+class LemmaModel(Base):
 	__tablename__ = "lemmi"
 
 	rowid = Column(Integer, primary_key=True)

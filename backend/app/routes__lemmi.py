@@ -6,13 +6,14 @@ from core__security import JWTBearer
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as lemmi_crud
-from schemas__lemmi import LemmaBase, LemmaList
+from models__lemmi import LemmaModel
+from schemas__lemmi import LemmaSchema, LemmaListSchema
 from scrape_lemmi import Scaprer
 
 router = APIRouter(prefix="/lemmi",)
 
 
-@router.get("/list", response_model=LemmaList)
+@router.get("/list", response_model=LemmaListSchema)
 async def get_lemmi(
 	offset: int | str | None = None,
 	order_by: FieldEnum = FieldEnum.lemma,
@@ -60,6 +61,6 @@ async def lookup_lemma(lemma: str, _: str = Depends(JWTBearer())):
 
 
 @router.post("/insert", status_code=status.HTTP_201_CREATED)
-async def insert_lemma(*, lemma: LemmaBase, db: Session = Depends(get_db), _: str = Depends(JWTBearer())) -> LemmaBase:
+async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db), _: str = Depends(JWTBearer())) -> LemmaModel:
 	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma)
 	return lemma
