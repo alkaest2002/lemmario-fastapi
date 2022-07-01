@@ -19,8 +19,9 @@ app = FastAPI()
 app.include_router(routes__lemmi.router)
 app.include_router(routes__users.router)
 
+
 @app.get("/")
-def get_root(): return { "message": "Welcome. Lemmario's API" }
+def get_root(): return {"message": "Welcome. Lemmario's API"}
 
 
 ############################################################################

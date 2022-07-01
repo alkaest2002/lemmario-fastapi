@@ -1,5 +1,6 @@
 from pydantic import BaseSettings
 
+
 class Settings(BaseSettings):
   JWT_SECRET_KEY: str
   ADMIN_EMAIL: str
@@ -10,5 +11,6 @@ class Settings(BaseSettings):
   class Config:
     case_sensitive = True
     env_file = ".env"
+
 
 settings = Settings()

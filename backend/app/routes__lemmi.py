@@ -14,24 +14,24 @@ router = APIRouter(prefix="/lemmi",)
 
 @router.get("/list", response_model=LemmaOut)
 async def get_lemmi(
-	offset: int | str | None = None, 
+	offset: int | str | None = None,
 	order_by: FieldEnum = FieldEnum.lemma,
 	order_dir: OrderDirEnum = OrderDirEnum.asc,
 	page_dir: PageDirEnum = PageDirEnum.next,
-	page_size: int = 5, 
-	db: Session = Depends(get_db), 
+	page_size: int = 5,
+	db: Session = Depends(get_db),
 	_: str = Depends(JWTBearer())
 ):
 	lemmi = lemmi_crud.get_lemmi(
-		db=db, 
-		offset=offset, 
+		db=db,
+		offset=offset,
 		order_by=order_by,
 		order_dir=order_dir,
-		page_dir=page_dir, 
+		page_dir=page_dir,
 		page_size=page_size+1,
 	)
 	data_to_return = dict(
-		data=lemmi, 
+		data=lemmi,
 		metadata=dict(
 			offset=offset if len(lemmi) == page_size+1 else None,
 			order_by=order_by,
@@ -41,21 +41,25 @@ async def get_lemmi(
 		)
 	)
 	return data_to_return
-	
+
+
 @router.get("/view/{lemma}")
 async def get_lemma(lemma: str, db: Session = Depends(get_db), _: str = Depends(JWTBearer())):
 	lemma = lemmi_crud.get_lemma(db=db, lemma=lemma)
 	return lemma
 
+
 @router.get("/search/{lemma}")
 async def search_lemma(lemma: str, _: str = Depends(JWTBearer())):
 	return Scaprer(lemma).scrape_search()
+
 
 @router.get("/lookup/{lemma}")
 async def lookup_lemma(lemma: str, _: str = Depends(JWTBearer())):
 	return Scaprer(lemma).scrape_lookup()
 
-@router.post("/insert", status_code=	status.HTTP_201_CREATED)
-async def insert_lemma(*,lemma: LemmaBase, db: Session = Depends(get_db), _: str = Depends(JWTBearer())) -> LemmaBase:
+
+@router.post("/insert", status_code=status.HTTP_201_CREATED)
+async def insert_lemma(*, lemma: LemmaBase, db: Session = Depends(get_db), _: str = Depends(JWTBearer())) -> LemmaBase:
 	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma)
 	return lemma

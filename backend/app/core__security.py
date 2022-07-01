@@ -8,7 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 
-from schemas__tokens  import TokenPayload
+from schemas__tokens import TokenPayload
 
 from core__config import settings
 
@@ -22,27 +22,28 @@ class PasswordManager():
   def verify_password(self, password: str, hashed_pass: str) -> bool:
     return self.password_context.verify(password, hashed_pass)
 
+
 @dataclass
 class TokenMaker():
-  token_subject: str
-  access_token_expiration: timedelta = timedelta(days=30)
-  refresh_token_expiration: timedelta = timedelta(days=90)
   token_algorithm: str = "HS256"
   jwt_secret_key: str = settings.JWT_SECRET_KEY
+  access_token_expiration: timedelta = timedelta(days=30)
+  refresh_token_expiration: timedelta = timedelta(days=90)
 
-  def _create_token(self, expiration: timedelta) -> str:
-    to_encode = {"exp": datetime.utcnow() + expiration, "sub": self.token_subject}
+  def _create_token(self, sub: str, expiration: timedelta) -> str:
+    to_encode = {"exp": datetime.utcnow() + expiration, "sub": sub}
     return jwt.encode(to_encode, self.jwt_secret_key, algorithm=self.token_algorithm)
 
-  def create_access_token(self) -> str:
-    return self._create_token(self.access_token_expiration)
+  def create_access_token(self, sub: str) -> str:
+    return self._create_token(sub, self.access_token_expiration)
 
-  def create_refresh_token(self) -> str:
-    return self._create_token(self.refresh_token_expiration)
+  def create_refresh_token(self, sub: str) -> str:
+    return self._create_token(sub, self.refresh_token_expiration)
+
 
 class JWTBearer(HTTPBearer):
-  
-  def __init__(self, auto_error: bool = True, algorithms: list[str] = "HS256"):
+
+  def __init__(self, auto_error: bool = True, algorithms: list[str] = ["HS256"]):
     super(JWTBearer, self).__init__(auto_error=auto_error)
     self.algorithms = algorithms
     self.jwt_secret_key = settings.JWT_SECRET_KEY
@@ -52,16 +53,20 @@ class JWTBearer(HTTPBearer):
     credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
     # check credentials
     if not credentials:
-      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Credentials were not provided.")
+      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                          detail="Credentials were not provided.")
     if not credentials.scheme == "Bearer":
-      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authentication scheme.")
+      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                          detail="Invalid authentication scheme.")
     # verify credetionals
-    return self.verify_token(credentials.credentials)      
+    return self.verify_token(credentials.credentials)
 
   def verify_token(self, token: str) -> str:
     try:
-      payload = jwt.decode(token, self.jwt_secret_key, algorithms=self.algorithms)
+      payload = jwt.decode(token, self.jwt_secret_key,
+                           algorithms=self.algorithms)
       token_payload = TokenPayload(**payload)
     except JWTError:
-      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token or expired token.")
+      raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                          detail="Invalid token or expired token.")
     return token_payload.dict()["sub"]

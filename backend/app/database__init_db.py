@@ -6,7 +6,8 @@ from core__config import settings
 
 DATABASE_URL = settings.DATABASE_URL
 
-engine = create_engine(DATABASE_URL, future=True, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL, future=True, connect_args={
+                       "check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
