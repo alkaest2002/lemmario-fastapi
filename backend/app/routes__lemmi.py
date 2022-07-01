@@ -6,13 +6,13 @@ from core__security import JWTBearer
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as lemmi_crud
-from schemas__lemmi import LemmaBase, LemmaOut
+from schemas__lemmi import LemmaBase, LemmaList
 from scrape_lemmi import Scaprer
 
 router = APIRouter(prefix="/lemmi",)
 
 
-@router.get("/list", response_model=LemmaOut)
+@router.get("/list", response_model=LemmaList)
 async def get_lemmi(
 	offset: int | str | None = None,
 	order_by: FieldEnum = FieldEnum.lemma,

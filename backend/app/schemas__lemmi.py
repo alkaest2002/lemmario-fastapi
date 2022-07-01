@@ -16,7 +16,7 @@ class Lemma(LemmaBase):
 		orm_mode = True
 
 
-class LemmaMetadata(BaseModel):
+class LemmaSearchaMetadata(BaseModel):
 	offset: int | str | None = None
 	order_by: str | None = None
 	order_dir: str | None = None
@@ -24,9 +24,9 @@ class LemmaMetadata(BaseModel):
 	page_size: int = 5
 
 
-class LemmaOut(BaseModel):
+class LemmaList(BaseModel):
 	data: list[Lemma]
-	metadata: LemmaMetadata
+	metadata: LemmaSearchaMetadata
 
 
 class LemmaLookup(BaseModel):
