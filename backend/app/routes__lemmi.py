@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from dependency__db import get_db
@@ -55,7 +55,7 @@ async def search_lemma(lemma: str, _: str = Depends(JWTBearer())):
 async def lookup_lemma(lemma: str, _: str = Depends(JWTBearer())):
 	return Scaprer(lemma).scrape_lookup()
 
-@router.post("/insert")
-async def insert_lemma(*,lemma: LemmaBase, db: Session = Depends(get_db), _: str = Depends(JWTBearer()), response: Response) -> LemmaBase:
-	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma, response=response)
+@router.post("/insert", status_code=	status.HTTP_201_CREATED)
+async def insert_lemma(*,lemma: LemmaBase, db: Session = Depends(get_db), _: str = Depends(JWTBearer())) -> LemmaBase:
+	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma)
 	return lemma
