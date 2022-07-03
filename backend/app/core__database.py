@@ -12,3 +12,7 @@ engine = create_engine(DATABASE_URL, future=True, connect_args={
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+
+def set_database():
+  Base.metadata.create_all(engine)

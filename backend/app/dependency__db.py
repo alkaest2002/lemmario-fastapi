@@ -1,5 +1,5 @@
 
-from database__init_db import SessionLocal
+from core__database import SessionLocal
 
 
 def get_db():

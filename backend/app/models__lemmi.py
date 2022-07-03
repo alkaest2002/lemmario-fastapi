@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from database__init_db import Base
+from core__database import Base
 
 
 class LemmaModel(Base):

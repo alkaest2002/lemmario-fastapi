@@ -1,10 +1,12 @@
 
+from fastapi import FastAPI
+
 from starlette.responses import JSONResponse
 from fastapi import Request, status
 from sqlalchemy.exc import IntegrityError
 
 
-def set_errors_handlers(app):
+def set_errors_handlers(app: FastAPI):
 
   @app.exception_handler(IntegrityError)
   async def sqlalchemy_integrity_error(request: Request, excepion: IntegrityError):

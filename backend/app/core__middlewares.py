@@ -2,26 +2,27 @@
 import re
 
 from starlette.responses import JSONResponse
-from fastapi import Request, status, HTTPException
+from fastapi import FastAPI, Request, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from core__security import JWTBearer
 
-def set_middlewares(app):
+
+def set_middlewares(app: FastAPI):
 
   app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-      "http://localhost",
-      "http://localhost:5000",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+      CORSMiddleware,
+      allow_origins=[
+          "http://localhost",
+          "http://localhost:5000",
+      ],
+      allow_credentials=True,
+      allow_methods=["*"],
+      allow_headers=["*"],
   )
 
   @app.middleware("http")
   async def add_security(request: Request, call_next):
-    if not re.search('login', request.url.path):
+    if not (re.search("login", request.url.path) or request.url.path=="/"):
       try:
         token = JWTBearer()
         await token.__call__(request)
