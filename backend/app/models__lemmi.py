@@ -7,8 +7,8 @@ class LemmaModel(Base):
 	__tablename__ = "lemmi"
 
 	rowid = Column(Integer, primary_key=True)
-	lemma = Column(String, unique=True, index=True)
-	letter = Column(String)
-	definition = Column(String)
-	created = Column(Integer)
-	updated = Column(Integer)
+	lemma = Column(String, unique=True, nullable=False, index=True)
+	letter = Column(String, nullable=False)
+	definition = Column(String, nullable=False)
+	created = Column(Integer, nullable=False)
+	updated = Column(Integer, nullable=False)

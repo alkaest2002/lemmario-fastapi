@@ -2,13 +2,11 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from dependency__db import get_db
-from core__security import JWTBearer
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as lemmi_crud
 from models__lemmi import LemmaModel
 from schemas__lemmi import LemmaSchema, LemmaListSchema
-from scrape_lemmi import Scaprer
 
 router = APIRouter(prefix="/lemmi",)
 
@@ -21,7 +19,6 @@ async def get_lemmi(
 	page_dir: PageDirEnum = PageDirEnum.next,
 	page_size: int = 5,
 	db: Session = Depends(get_db),
-	_: str = Depends(JWTBearer())
 ):
 	lemmi = lemmi_crud.get_lemmi(
 		db=db,
@@ -45,22 +42,12 @@ async def get_lemmi(
 
 
 @router.get("/view/{lemma}")
-async def get_lemma(lemma: str, db: Session = Depends(get_db), _: str = Depends(JWTBearer())):
+async def get_lemma(lemma: str, db: Session = Depends(get_db)):
 	lemma = lemmi_crud.get_lemma(db=db, lemma=lemma)
 	return lemma
 
 
-@router.get("/search/{lemma}")
-async def search_lemma(lemma: str, _: str = Depends(JWTBearer())):
-	return Scaprer(lemma).scrape_search()
-
-
-@router.get("/lookup/{lemma}")
-async def lookup_lemma(lemma: str, _: str = Depends(JWTBearer())):
-	return Scaprer(lemma).scrape_lookup()
-
-
 @router.post("/insert", status_code=status.HTTP_201_CREATED)
-async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db), _: str = Depends(JWTBearer())) -> LemmaModel:
+async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
 	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma)
 	return lemma
