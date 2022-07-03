@@ -46,4 +46,5 @@ def create_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 	data = LemmaModel(**lemma.dict())
 	db.add(data)
 	db.commit()
+	db.refresh(data)
 	return data
