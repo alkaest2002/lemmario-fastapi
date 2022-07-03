@@ -31,7 +31,12 @@ class TokenMaker():
   refresh_token_expiration: timedelta = timedelta(days=90)
 
   def _create_token(self, sub: str, expiration: timedelta) -> str:
-    to_encode = {"exp": datetime.utcnow() + expiration, "sub": sub}
+    now = datetime.utcnow()
+    to_encode = {
+      "iat": now,
+      "exp": now + expiration, 
+      "sub": sub
+    }
     return jwt.encode(to_encode, self.jwt_secret_key, algorithm=self.token_algorithm)
 
   def create_access_token(self, sub: str) -> str:

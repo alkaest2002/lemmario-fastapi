@@ -7,5 +7,6 @@ class TokenSchema(BaseModel):
 
 
 class TokenPayloadSchema(BaseModel):
-  sub: str = None
-  exp: int = None
+  iat: int
+  exp: int
+  sub: str
