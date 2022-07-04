@@ -25,7 +25,7 @@ def add_middlewares(app: FastAPI):
     if not (re.search("login", request.url.path) or request.url.path=="/"):
       try:
         token = JWTBearer()
-        await token.__call__(request)
+        await token(request)
       except HTTPException as err:
         return JSONResponse(content=dict(detail=err.detail), status_code=err.status_code)
       except Exception as err:
