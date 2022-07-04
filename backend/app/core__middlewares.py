@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core__security import JWTBearer
 
 
-def set_middlewares(app: FastAPI):
+def add_middlewares(app: FastAPI):
 
   app.add_middleware(
       CORSMiddleware,

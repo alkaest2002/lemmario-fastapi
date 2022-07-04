@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from scrape_lemmi import Scaprer
+from scrape_lemmi import TreccaniScaprer
 
 
 router = APIRouter(prefix="/scrape",)
@@ -9,9 +9,9 @@ router = APIRouter(prefix="/scrape",)
 
 @router.get("/search/{lemma}")
 async def search_lemma(lemma: str):
-	return Scaprer(lemma).scrape_search()
+	return TreccaniScaprer(lemma).search()
 
 
 @router.get("/view/{lemma}")
 async def lookup_lemma(lemma: str):
-	return Scaprer(lemma).scrape_lookup()
+	return TreccaniScaprer(lemma).lookup()

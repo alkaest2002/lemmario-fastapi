@@ -14,5 +14,5 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
-def set_database():
+def add_database():
   Base.metadata.create_all(engine)

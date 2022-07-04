@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from core__database import set_database
-from core__errors_handlers import set_errors_handlers
-from core__middlewares import set_middlewares
-from core__routes import set_routes
+from core__database import add_database
+from core__errors_handlers import add_error_handlers
+from core__middlewares import add_middlewares
+from core__routes import add_routes
 
 
 app = FastAPI()
@@ -15,22 +15,22 @@ def get_root():
 ############################################################################
 # DATABASE
 ############################################################################
-set_database()
+add_database()
 
 
 ############################################################################
 # ROUTES
 ############################################################################
-set_routes(app)
+add_routes(app)
 
 
 ############################################################################
 # MIDDLEWARES
 ############################################################################
-set_middlewares(app)
+add_middlewares(app)
 
 
 ############################################################################
 # EXCEPTION HANDLERS
 ############################################################################
-set_errors_handlers(app)
+add_error_handlers(app)

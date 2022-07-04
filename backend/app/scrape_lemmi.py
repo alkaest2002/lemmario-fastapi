@@ -12,7 +12,7 @@ def clean_text(lemma: str) -> str:
   return lemma
 
 
-class Scaprer():
+class TreccaniScaprer():
 
   def __init__(self, lemma: str):
     self.lemma = lemma
@@ -39,7 +39,7 @@ class Scaprer():
     definition = clean_text(definition)
     return LemmaLookupSchema(lemma=lemma, definition=definition)
 
-  def scrape_search(self) -> list[LemmaSearchSchema]:
+  def search(self) -> list[LemmaSearchSchema]:
     page = requests.get(f"{self.base_url}/ricerca/{self.lemma}/")
     soup = BeautifulSoup(page.content, "html.parser")
     occurences = soup.find("div", class_="treccani-container-left_container").find_all(
@@ -48,7 +48,7 @@ class Scaprer():
         return self._process_search_lemma(occurences)
     return []
 
-  def scrape_lookup(self) -> list[LemmaLookupSchema]:
+  def lookup(self) -> list[LemmaLookupSchema]:
     page = requests.get(f"{self.base_url}/{self.lemma}/")
     soup = BeautifulSoup(page.content, "html.parser")
     occurences = soup.find_all("div", class_="text spiega")
