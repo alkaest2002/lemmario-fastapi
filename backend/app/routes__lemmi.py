@@ -49,7 +49,7 @@ async def get_lemma(lemma: str, db: Session = Depends(get_db)) -> LemmaModel:
 
 
 @router.get("/search/{lemma}")
-async def search_lemma(lemma: constr(min_length=2), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSerachModel]:
+async def search_lemma(lemma: constr(min_length=3), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSerachModel]:
 	result = lemmi_crud.search_lemma(db=db, lemma=lemma, exact=exact)
 	return result
 

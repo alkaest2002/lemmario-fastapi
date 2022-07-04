@@ -54,5 +54,5 @@ def create_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 
 def search_lemma(db: Session, lemma: str, exact: bool) -> LemmaFullTextSerachModel:
 	q = db.query(text("highlight(lemmi_fts, 1, '<b>', '</b>') as 'definition'")).filter(LemmaFullTextSerachModel.definition\
-		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(20)
+		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(30)
 	return [LemmaFullTextSerachModel(definition=l[0]) for l in q.all()]
