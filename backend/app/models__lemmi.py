@@ -12,3 +12,10 @@ class LemmaModel(Base):
 	definition = Column(String, nullable=False)
 	created = Column(Integer, nullable=False)
 	updated = Column(Integer, nullable=False)
+
+
+class LemmaFullTextSerachModel(Base):
+	__tablename__ = "lemmi_fts"
+
+	rowid = Column(Integer, primary_key=True)
+	definition = Column(String, nullable=False)

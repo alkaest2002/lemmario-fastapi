@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends, status
+from pydantic import constr
 from sqlalchemy.orm import Session
 
 from dependency__db import get_db
 from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
 
 import crud__lemmi as lemmi_crud
-from models__lemmi import LemmaModel
+from models__lemmi import LemmaModel, LemmaFullTextSerachModel
 from schemas__lemmi import LemmaSchema, LemmaListSchema
 
-router = APIRouter(prefix="/lemmi",)
+router = APIRouter(prefix="/lemmi")
 
 
 @router.get("/list", response_model=LemmaListSchema)
@@ -19,7 +20,7 @@ async def get_lemmi(
 	page_dir: PageDirEnum = PageDirEnum.next,
 	page_size: int = 5,
 	db: Session = Depends(get_db),
-):
+) -> LemmaListSchema:
 	lemmi = lemmi_crud.get_lemmi(
 		db=db,
 		offset=offset,
@@ -42,12 +43,18 @@ async def get_lemmi(
 
 
 @router.get("/view/{lemma}")
-async def get_lemma(lemma: str, db: Session = Depends(get_db)):
-	lemma = lemmi_crud.get_lemma(db=db, lemma=lemma)
-	return lemma
+async def get_lemma(lemma: str, db: Session = Depends(get_db)) -> LemmaModel:
+	result = lemmi_crud.get_lemma(db=db, lemma=lemma)
+	return result
+
+
+@router.get("/search/{lemma}")
+async def search_lemma(lemma: constr(min_length=2), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSerachModel]:
+	result = lemmi_crud.search_lemma(db=db, lemma=lemma, exact=exact)
+	return result
 
 
 @router.post("/insert", status_code=status.HTTP_201_CREATED)
 async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
-	lemma = lemmi_crud.create_lemma(db=db, lemma=lemma)
-	return lemma
+	result = lemmi_crud.create_lemma(db=db, lemma=lemma)
+	return result

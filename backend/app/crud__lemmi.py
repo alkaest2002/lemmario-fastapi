@@ -1,7 +1,8 @@
-from fastapi import HTTPException, status
+from pydantic import constr
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from models__lemmi import LemmaModel
+from models__lemmi import LemmaModel, LemmaFullTextSerachModel
 from schemas__lemmi import LemmaSchema
 
 from core_enums import PageDirEnum, OrderDirEnum
@@ -42,9 +43,16 @@ def get_lemma(db: Session, lemma: str) -> LemmaModel:
 	return db.query(LemmaModel).filter(LemmaModel.lemma == lemma).first()
 
 
+
 def create_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 	data = LemmaModel(**lemma.dict())
 	db.add(data)
 	db.commit()
 	db.refresh(data)
 	return data
+
+
+def search_lemma(db: Session, lemma: str, exact: bool) -> LemmaFullTextSerachModel:
+	q = db.query(text("highlight(lemmi_fts, 1, '<b>', '</b>') as 'definition'")).filter(LemmaFullTextSerachModel.definition\
+		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(20)
+	return [LemmaFullTextSerachModel(definition=l[0]) for l in q.all()]
