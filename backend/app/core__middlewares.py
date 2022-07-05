@@ -22,7 +22,7 @@ def add_middlewares(app: FastAPI):
 
   @app.middleware("http")
   async def add_security(request: Request, call_next):
-    if not (re.search("login", request.url.path) or request.url.path=="/"):
+    if (re.search("lemmi|scrape", request.url.path)):
       try:
         token = JWTBearer()
         await token(request)

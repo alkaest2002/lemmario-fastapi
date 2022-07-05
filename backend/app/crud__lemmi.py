@@ -1,4 +1,4 @@
-from pydantic import constr
+from fastapi import HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -54,5 +54,14 @@ def create_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 
 def search_lemma(db: Session, lemma: str, exact: bool) -> LemmaFullTextSerachModel:
 	q = db.query(text("highlight(lemmi_fts, 1, '<b>', '</b>') as 'definition'")).filter(LemmaFullTextSerachModel.definition\
-		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(30)
-	return [LemmaFullTextSerachModel(definition=l[0]) for l in q.all()]
+		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(20)
+	return [LemmaFullTextSerachModel(definition=l) for l in db.execute(q).scalars().all()]
+
+
+def delete_lemma(db: Session, lemma_id: int) -> LemmaModel:
+	lemma_to_delete = db.query(LemmaModel).filter(LemmaModel.rowid == lemma_id).first()
+	if not lemma_to_delete:
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="record not found.")
+	db.delete(lemma_to_delete)
+	db.commit()
+	return lemma_to_delete

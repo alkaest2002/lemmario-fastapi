@@ -58,3 +58,9 @@ async def search_lemma(lemma: constr(min_length=3), exact: bool = False, db: Ses
 async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
 	result = lemmi_crud.create_lemma(db=db, lemma=lemma)
 	return result
+
+
+@router.post("/delete/{id}")
+async def insert_lemma(*, id: int, db: Session = Depends(get_db)) -> LemmaModel:
+	result = lemmi_crud.delete_lemma(db=db, lemma_id=id)
+	return result
