@@ -13,7 +13,7 @@ router = APIRouter(prefix="/lemmi")
 
 
 @router.get("/list", response_model=LemmaListSchema)
-async def get_lemmi(
+async def list_lemmi(
 	offset: int | str | None = None,
 	order_by: FieldEnum = FieldEnum.lemma,
 	order_dir: OrderDirEnum = OrderDirEnum.asc,
@@ -21,7 +21,7 @@ async def get_lemmi(
 	page_size: int = 5,
 	db: Session = Depends(get_db),
 ) -> LemmaListSchema:
-	lemmi = lemmi_crud.get_lemmi(
+	lemmi = lemmi_crud.list_lemmi(
 		db=db,
 		offset=offset,
 		order_by=order_by,
@@ -42,25 +42,26 @@ async def get_lemmi(
 	return data_to_return
 
 
-@router.get("/view/{lemma}")
-async def get_lemma(lemma: str, db: Session = Depends(get_db)) -> LemmaModel:
-	result = lemmi_crud.get_lemma(db=db, lemma=lemma)
-	return result
+@router.get("/view/{lemma_id}")
+async def view_lemma(lemma_id: int, db: Session = Depends(get_db)) -> LemmaModel:
+	return lemmi_crud.view_lemma(db=db, lemma_id=lemma_id)
 
 
 @router.get("/search/{lemma}")
 async def search_lemma(lemma: constr(min_length=3), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSerachModel]:
-	result = lemmi_crud.search_lemma(db=db, lemma=lemma, exact=exact)
-	return result
-
+	return lemmi_crud.search_lemma(db=db, lemma=lemma, exact=exact)
+	
 
 @router.post("/insert", status_code=status.HTTP_201_CREATED)
 async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
-	result = lemmi_crud.create_lemma(db=db, lemma=lemma)
-	return result
+	return lemmi_crud.insert_lemma(db=db, lemma=lemma)
+
+
+@router.put("/update/{lemma_id}", status_code=status.HTTP_201_CREATED)
+async def update_lemma(*, lemma_id: int, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
+	return lemmi_crud.update_lemma(db=db, lemma_id=lemma_id, lemma=lemma)
 
 
 @router.post("/delete/{id}")
-async def insert_lemma(*, id: int, db: Session = Depends(get_db)) -> LemmaModel:
-	result = lemmi_crud.delete_lemma(db=db, lemma_id=id)
-	return result
+async def delete_lemma(*, id: int, db: Session = Depends(get_db)) -> LemmaModel:
+	return lemmi_crud.delete_lemma(db=db, lemma_id=id)
