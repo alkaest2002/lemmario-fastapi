@@ -3,14 +3,14 @@ from pydantic import BaseModel
 
 class LemmaSchema(BaseModel):
 	lemma: str
-	letter: str
 	definition: str
-	created: int
-	updated: int
-
+	
 
 class LemmaORMSchema(LemmaSchema):
 	rowid: int
+	letter: str
+	created: int
+	updated: int
 
 	class Config:
 		orm_mode = True

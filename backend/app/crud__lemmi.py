@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import time
 from fastapi import HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -8,7 +9,7 @@ from schemas__lemmi import LemmaSchema
 
 from core_enums import PageDirEnum, OrderDirEnum
 
-def retrieve_or_not_found(db: Session, lemma_id: int):
+def retrieve_or_die(db: Session, lemma_id: int):
 	lemma_to_check = db.query(LemmaModel).filter(LemmaModel.rowid == lemma_id).first()
 	if not lemma_to_check:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="record not found.")
@@ -53,12 +54,16 @@ def search_lemma(db: Session, lemma: str, exact: bool) -> list[LemmaFullTextSera
 
 
 def view_lemma(db: Session, lemma_id: int) -> LemmaModel:
-	lemma_to_view = retrieve_or_not_found(db=db, lemma_id=lemma_id)
+	lemma_to_view = retrieve_or_die(db=db, lemma_id=lemma_id)
 	return lemma_to_view
 
 
 def insert_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 	lemma_to_insert = LemmaModel(**lemma.dict())
+	timestamp = datetime.timestamp(datetime.now())
+	lemma_to_insert.letter = lemma.lemma[0].upper()
+	lemma_to_insert.created = timestamp
+	lemma_to_insert.updated = timestamp
 	db.add(lemma_to_insert)
 	db.commit()
 	db.refresh(lemma_to_insert)
@@ -66,9 +71,10 @@ def insert_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 
 
 def update_lemma(db: Session, lemma_id: int, lemma: LemmaSchema)-> LemmaModel:
-	lemma_to_update = retrieve_or_not_found(db=db, lemma_id=lemma_id)
+	lemma_to_update = retrieve_or_die(db=db, lemma_id=lemma_id)
 	for key, value in lemma.__dict__.items():
 		setattr(lemma_to_update, key, value) 
+	LemmaModel.letter = lemma.lemma[0].upper()
 	lemma_to_update.updated = datetime.timestamp(datetime.now())
 	db.commit()
 	db.refresh(lemma_to_update)
@@ -76,7 +82,7 @@ def update_lemma(db: Session, lemma_id: int, lemma: LemmaSchema)-> LemmaModel:
 
 
 def delete_lemma(db: Session, lemma_id: int) -> LemmaModel:
-	lemma_to_delete = retrieve_or_not_found(db=db, lemma_id=lemma_id)
+	lemma_to_delete = retrieve_or_die(db=db, lemma_id=lemma_id)
 	db.delete(lemma_to_delete)
 	db.commit()
 	return lemma_to_delete
