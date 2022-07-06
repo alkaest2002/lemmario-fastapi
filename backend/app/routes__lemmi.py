@@ -57,7 +57,7 @@ async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> 
 	return lemmi_crud.insert_lemma(db=db, lemma=lemma)
 
 
-@router.put("/update/{lemma_id}", status_code=status.HTTP_201_CREATED)
+@router.put("/update/{lemma_id}")
 async def update_lemma(*, lemma_id: int, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
 	return lemmi_crud.update_lemma(db=db, lemma_id=lemma_id, lemma=lemma)
 
