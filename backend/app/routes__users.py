@@ -18,7 +18,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
   # verify email
   if username != admin_email:
     raise HTTPException(
-      status_code=status.status.HTTP_401_UNAUTHORIZED,
+      status_code=status.HTTP_401_UNAUTHORIZED,
       detail="Incorrect email"
     )
   # verify password
