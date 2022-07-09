@@ -13,7 +13,7 @@ def add_middlewares(app: FastAPI):
       CORSMiddleware,
       allow_origins=[
           "http://localhost",
-          "http://localhost:5000",
+          "http://localhost:3000",
       ],
       allow_credentials=True,
       allow_methods=["*"],
