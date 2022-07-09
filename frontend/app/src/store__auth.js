@@ -1,16 +1,15 @@
 import { defineStore } from "pinia";
-
 import { fetchWrapper } from "./utils__fetch";
 
 const baseUrl = import.meta.env.VITE_API_URL;
 const authUrl = `${baseUrl}/utenti/login`;
-const accessToken = localStorage.getItem("accessToken");
+const { post } = fetchWrapper;
 
 export const useAuthStore = defineStore({
   id: "auth",
 
   state: () => ({
-    accessToken: accessToken ? JSON.parse(accessToken) : null,
+    accessToken: null,
     returnUrl: null,
   }),
 
@@ -21,13 +20,13 @@ export const useAuthStore = defineStore({
   actions: {
     async login(username, password) {
       try {
-        const { access_token: accessToken } = await fetchWrapper.post(
+        const data = { body: { username, password }, isformUrlEncoded: true };
+        const { access_token: accessToken } = await post(
           authUrl,
           useAuthStore(),
-          { body: { username, password }, isformUrlEncoded: true }
+          data
         );
         this.accessToken = accessToken;
-        localStorage.setItem("accessToken", JSON.stringify(accessToken));
         return Promise.resolve(true);
       } catch (error) {
         return Promise.reject(error);
@@ -36,7 +35,6 @@ export const useAuthStore = defineStore({
 
     logout() {
       this.accessToken = null;
-      localStorage.removeItem("accessToken");
       return Promise.resolve(true);
     },
   },

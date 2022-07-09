@@ -58,10 +58,9 @@ const schema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
-const onSubmit = async (values, { setErrors }) => {
-  const authStore = useAuthStore();
-  const { username, password } = values;
+const onSubmit = async ({ username, password }, { setErrors }) => {
   try {
+    const authStore = useAuthStore();
     const successfulLogin = await authStore.login(username, password);
     router.push({ name: successfulLogin ? "route-home" : "route-login" });
   } catch (error) {
@@ -69,3 +68,9 @@ const onSubmit = async (values, { setErrors }) => {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+label {
+  display: block;
+}
+</style>

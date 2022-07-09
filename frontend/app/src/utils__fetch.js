@@ -4,14 +4,10 @@ const request =
     const requestOptions = { method, headers: authHeader(url, auth) };
     if (data) {
       const { body, isformUrlEncoded } = data;
-      if (isformUrlEncoded) {
-        requestOptions.headers["Content-Type"] =
-          "application/x-www-form-urlencoded";
-        requestOptions.body = new URLSearchParams({ ...body });
-      } else {
-        requestOptions.headers["Content-Type"] = "application/json";
-        requestOptions.body = body;
-      }
+      requestOptions.headers["Content-Type"] = isformUrlEncoded
+        ? "application/x-www-form-urlencoded"
+        : "application/json";
+      requestOptions.body = isformUrlEncoded ? new URLSearchParams(body) : body;
     }
     try {
       const response = await fetch(url, requestOptions);

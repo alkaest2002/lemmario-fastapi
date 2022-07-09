@@ -14,9 +14,9 @@ export const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const publicPages = ["/login"];
-  const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
+  const publicRoutes = ["route-login"];
+  const authRequired = !publicRoutes.includes(to.name);
   if (!authRequired && auth.isLoggedIn) return { name: "route-home" };
   if (authRequired && !auth.isLoggedIn) {
     auth.returnUrl = to.fullPath;
