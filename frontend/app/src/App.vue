@@ -1,10 +1,6 @@
 <template>
   <router-view v-slot="{ Component }">
-    <transition
-      name="fade" 
-      mode="out-in" 
-      appear
-    >
+    <transition name="fade" mode="out-in" appear>
       <component :is="Component" />
     </transition>
   </router-view>
@@ -15,13 +11,14 @@ import { watch } from "vue";
 import { useAuthStore } from "./store__auth";
 import { router } from "./router__main";
 
-const auth = useAuthStore()
+const auth = useAuthStore();
 
-watch(() => auth.accessToken, (newValue) => {
-  if (newValue == null)
-    router.push({ name: "route-login"})
-});
-
+watch(
+  () => auth.accessToken,
+  (newValue) => {
+    if (newValue == null) router.push({ name: "route-login" });
+  }
+);
 </script>
 
 <style>

@@ -8,23 +8,23 @@ const accessToken = localStorage.getItem("accessToken");
 
 export const useAuthStore = defineStore({
   id: "auth",
-  
+
   state: () => ({
     accessToken: accessToken ? JSON.parse(accessToken) : null,
-    returnUrl: null
+    returnUrl: null,
   }),
 
   getters: {
-    isLoggedIn: (state) => state.accessToken != null
+    isLoggedIn: (state) => state.accessToken != null,
   },
-  
+
   actions: {
     async login(username, password) {
       try {
         const { access_token: accessToken } = await fetchWrapper.post(
-          authUrl, 
+          authUrl,
           useAuthStore(),
-          { body: { username, password }, isformUrlEncoded: true }, 
+          { body: { username, password }, isformUrlEncoded: true }
         );
         this.accessToken = accessToken;
         localStorage.setItem("accessToken", JSON.stringify(accessToken));
@@ -33,11 +33,11 @@ export const useAuthStore = defineStore({
         return Promise.reject(error);
       }
     },
-    
+
     logout() {
       this.accessToken = null;
       localStorage.removeItem("accessToken");
       return Promise.resolve(true);
-    }
-  }
+    },
+  },
 });

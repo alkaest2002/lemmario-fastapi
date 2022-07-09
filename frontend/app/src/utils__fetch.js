@@ -1,12 +1,14 @@
-const request = (method) =>
+const request =
+  (method) =>
   async (url, auth, data = null) => {
-    const requestOptions = { method, headers: authHeader(url, auth)};
+    const requestOptions = { method, headers: authHeader(url, auth) };
     if (data) {
       const { body, isformUrlEncoded } = data;
       if (isformUrlEncoded) {
-        requestOptions.headers["Content-Type"] = "application/x-www-form-urlencoded";
+        requestOptions.headers["Content-Type"] =
+          "application/x-www-form-urlencoded";
         requestOptions.body = new URLSearchParams({ ...body });
-      } else{
+      } else {
         requestOptions.headers["Content-Type"] = "application/json";
         requestOptions.body = body;
       }
@@ -14,17 +16,17 @@ const request = (method) =>
     try {
       const response = await fetch(url, requestOptions);
       return handleResponse(response, auth);
-    } catch(error) {
+    } catch (error) {
       return Promise.reject(error);
     }
-  }
+  };
 
 const authHeader = (url, auth) => {
   const isApiUrl = url.startsWith(import.meta.env.VITE_API_URL);
-  return auth.isLoggedIn && isApiUrl 
+  return auth.isLoggedIn && isApiUrl
     ? { Authorization: `Bearer ${auth.accessToken}` }
     : {};
-}
+};
 
 const handleResponse = async (response, auth) => {
   const data = await response.json();
@@ -33,11 +35,11 @@ const handleResponse = async (response, auth) => {
     return Promise.reject(data?.detail || response.statusText || "error");
   }
   return data;
-}
+};
 
 export const fetchWrapper = {
   get: request("GET"),
   post: request("POST"),
   put: request("PUT"),
-  delete: request("DELETE")
+  delete: request("DELETE"),
 };

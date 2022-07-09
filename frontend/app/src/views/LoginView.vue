@@ -1,51 +1,45 @@
 <template>
   <div>
     <h2>Login</h2>
-    <Form 
+    <Form
       v-slot="{ errors, isSubmitting }"
-      :validation-schema="schema" 
-      @submit="onSubmit" 
+      :validation-schema="schema"
+      @submit="onSubmit"
     >
       <div class="form-group">
         <label>Username</label>
-        <Field 
-          name="username" 
-          type="text" 
-          class="form-control" 
-          :class="{ 'is-invalid': errors.username }" 
+        <Field
+          name="username"
+          type="text"
+          class="form-control"
+          :class="{ 'is-invalid': errors.username }"
         />
         <div class="invalid-feedback">
           {{ errors.username }}
         </div>
-      </div>            
+      </div>
       <div class="form-group">
         <label>Password</label>
         <Field
-          name="password" 
-          type="password" 
-          class="form-control" 
-          :class="{ 'is-invalid': errors.password }" 
+          name="password"
+          type="password"
+          class="form-control"
+          :class="{ 'is-invalid': errors.password }"
         />
         <div class="invalid-feedback">
           {{ errors.password }}
         </div>
-      </div>            
+      </div>
       <div class="form-group">
-        <button 
-          class="btn btn-primary" 
-          :disabled="isSubmitting"
-        >
-          <span 
-            v-show="isSubmitting" 
-            class="spinner-border spinner-border-sm mr-1" 
+        <button class="btn btn-primary" :disabled="isSubmitting">
+          <span
+            v-show="isSubmitting"
+            class="spinner-border spinner-border-sm mr-1"
           />
           Login
         </button>
       </div>
-      <div 
-        v-if="errors.apiError" 
-        class="alert alert-danger mt-3 mb-0"
-      >
+      <div v-if="errors.apiError" class="alert alert-danger mt-3 mb-0">
         {{ errors.apiError }}
       </div>
     </Form>
@@ -61,7 +55,7 @@ import { router } from "../router__main";
 
 const schema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
-  password: Yup.string().required("Password is required")
+  password: Yup.string().required("Password is required"),
 });
 
 const onSubmit = async (values, { setErrors }) => {
@@ -69,8 +63,8 @@ const onSubmit = async (values, { setErrors }) => {
   const { username, password } = values;
   try {
     const successfulLogin = await authStore.login(username, password);
-    router.push({ name: successfulLogin ? "route-home" : "route-login"})
-  } catch(error) {
+    router.push({ name: successfulLogin ? "route-home" : "route-login" });
+  } catch (error) {
     setErrors({ apiError: error });
   }
 };
