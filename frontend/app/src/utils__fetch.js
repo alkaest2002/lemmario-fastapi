@@ -1,35 +1,35 @@
-import { useAuthStore } from "./store__auth";
-
 const request = (method) =>
-  async (url, body, isformUrlEncoded=true) => {
-    const requestOptions = { method, headers: authHeader(url)};
-    if (body) {
+  async (url, auth, data = null) => {
+    const requestOptions = { method, headers: authHeader(url, auth)};
+    if (data) {
+      const { body, isformUrlEncoded } = data;
       if (isformUrlEncoded) {
         requestOptions.headers["Content-Type"] = "application/x-www-form-urlencoded";
-        requestOptions.body = new URLSearchParams({...body});
+        requestOptions.body = new URLSearchParams({ ...body });
       } else{
         requestOptions.headers["Content-Type"] = "application/json";
         requestOptions.body = body;
       }
     }
-    const response = await fetch(url, requestOptions);
-    return handleResponse(response);
+    try {
+      const response = await fetch(url, requestOptions);
+      return handleResponse(response, auth);
+    } catch(error) {
+      return Promise.reject(error);
+    }
   }
 
-
-const authHeader = (url) => {
-  const auth  = useAuthStore();
+const authHeader = (url, auth) => {
   const isApiUrl = url.startsWith(import.meta.env.VITE_API_URL);
   return auth.isLoggedIn && isApiUrl 
-    ? { Authorization: `Bearer ${auth.token}` }
+    ? { Authorization: `Bearer ${auth.accessToken}` }
     : {};
 }
 
-const handleResponse = async (response) => {
+const handleResponse = async (response, auth) => {
   const data = await response.json();
   if (!response.ok) {
-    const { token, logout } = useAuthStore();
-    if ([401, 403].includes(response.status) && token) logout();
+    if ([401, 403].includes(response.status) && auth.accessToken) auth.logout();
     return Promise.reject(data?.detail || response.statusText || "error");
   }
   return data;

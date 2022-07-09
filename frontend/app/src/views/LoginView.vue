@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div class="alert alert-info">
-      Username: test<br>
-      Password: test
-    </div>
     <h2>Login</h2>
     <Form 
       v-slot="{ errors, isSubmitting }"
@@ -57,20 +53,25 @@
 </template>
 
 <script setup>
-import { Form, Field } from 'vee-validate';
-import * as Yup from 'yup';
+import { Form, Field } from "vee-validate";
+import * as Yup from "yup";
 
 import { useAuthStore } from "../store__auth";
+import { router } from "../router__main";
 
 const schema = Yup.object().shape({
-  username: Yup.string().required('Username is required'),
-  password: Yup.string().required('Password is required')
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required")
 });
 
 const onSubmit = async (values, { setErrors }) => {
   const authStore = useAuthStore();
   const { username, password } = values;
-  await authStore.login(username, password)
-    .catch(error => setErrors({ apiError: error }));
-}
+  try {
+    const successfulLogin = await authStore.login(username, password);
+    router.push({ name: successfulLogin ? "route-home" : "route-login"})
+  } catch(error) {
+    setErrors({ apiError: error });
+  }
+};
 </script>

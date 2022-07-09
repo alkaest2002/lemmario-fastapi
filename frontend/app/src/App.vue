@@ -5,26 +5,30 @@
       mode="out-in" 
       appear
     >
-      <component 
-        :is="Component"
-        class="p-2"
-      />
+      <component :is="Component" />
     </transition>
   </router-view>
 </template>
 
-
 <script setup>
-</script>
+import { watch } from "vue";
+import { useAuthStore } from "./store__auth";
+import { router } from "./router__main";
 
+const auth = useAuthStore()
+
+watch(() => auth.accessToken, (newValue) => {
+  if (newValue == null)
+    router.push({ name: "route-login"})
+});
+
+</script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
