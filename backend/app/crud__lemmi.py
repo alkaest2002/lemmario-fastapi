@@ -16,49 +16,65 @@ def retrieve_or_die(db: Session, lemma_id: int):
 	return lemma_to_check
 
 
-def list_lemmi(db: Session, offset: int | str | None, order_by: str, order_dir: str, page_dir: str, page_size: int) -> list[LemmaModel]:
+def list_lemmi(
+	filter_by: str | None,
+	filter_value: str | None,
+	order_by: str, 
+	order_value: str, 
+	page_dir: str, 
+	page_size: int,
+	offset: int | str | None,
+	db: Session
+) -> list[LemmaModel]:
 	# init query
 	q = db.query(LemmaModel)
-	# define field to operate on
-	field = getattr(LemmaModel, order_by)
+	# define order_by_field to operate on
+	order_by_field = getattr(LemmaModel, order_by)
 	# add order by to query
-	if page_dir == PageDirEnum.next and order_dir == OrderDirEnum.asc:
-		q = q.order_by(field)
-	if page_dir == PageDirEnum.prev and order_dir == OrderDirEnum.desc:
-		q = q.order_by(field)
-	if page_dir == PageDirEnum.next and order_dir == OrderDirEnum.desc:
-		q = q.order_by(field.desc())
-	if page_dir == PageDirEnum.prev and order_dir == OrderDirEnum.asc:
-		q = q.order_by(field.desc())
+	if page_dir == PageDirEnum.next and order_value == OrderDirEnum.asc:
+		q = q.order_by(order_by_field)
+	if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.desc:
+		q = q.order_by(order_by_field)
+	if page_dir == PageDirEnum.next and order_value == OrderDirEnum.desc:
+		q = q.order_by(order_by_field.desc())
+	if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.asc:
+		q = q.order_by(order_by_field.desc())
 	# if offset is set
 	if offset:
 		# add offset clause to query
-		if page_dir == PageDirEnum.next and order_dir == OrderDirEnum.asc:
-			q = q.where(field >= offset)
-		if page_dir == PageDirEnum.prev and order_dir == OrderDirEnum.desc:
-			q = q.where(field >= offset)
-		if page_dir == PageDirEnum.next and order_dir == OrderDirEnum.desc:
-			q = q.where(field <= offset)
-		if page_dir == PageDirEnum.prev and order_dir == OrderDirEnum.asc:
-			q = q.where(field <= offset)
+		if page_dir == PageDirEnum.next and order_value == OrderDirEnum.asc:
+			q = q.where(order_by_field >= offset)
+		if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.desc:
+			q = q.where(order_by_field >= offset)
+		if page_dir == PageDirEnum.next and order_value == OrderDirEnum.desc:
+			q = q.where(order_by_field <= offset)
+		if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.asc:
+			q = q.where(order_by_field <= offset)
+	# if filter is set
+	if (filter_by and filter_value):
+		# define filter_by_field to operate on
+		filter_by_field = getattr(LemmaModel, filter_by)
+		print(filter_by_field, filter_value)
+		# add filter by to query
+		q = q.filter(filter_by_field.startswith(filter_value))
 	# retrieve records
 	records = q.limit(page_size).all()
 	# reverse records if needed
 	return records[::-1 if page_dir == PageDirEnum.prev else 1]
 
 
-def search_lemma(db: Session, lemma: str, exact: bool) -> list[LemmaFullTextSerachModel]:
+def search_lemma(lemma: str, exact: bool, db: Session) -> list[LemmaFullTextSerachModel]:
 	q = db.query(text("highlight(lemmi_fts, 1, '<b>', '</b>') as 'definition'")).filter(LemmaFullTextSerachModel.definition\
 		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(20)
 	return [LemmaFullTextSerachModel(definition=l) for l in db.execute(q).scalars().all()]
 
 
-def view_lemma(db: Session, lemma_id: int) -> LemmaModel:
+def view_lemma(lemma_id: int, db: Session) -> LemmaModel:
 	lemma_to_view = retrieve_or_die(db=db, lemma_id=lemma_id)
 	return lemma_to_view
 
 
-def insert_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
+def insert_lemma(lemma: LemmaSchema, db: Session) -> LemmaModel:
 	lemma_to_insert = LemmaModel(**lemma.dict())
 	timestamp = datetime.timestamp(datetime.now())
 	lemma_to_insert.letter = lemma.lemma[0].upper()
@@ -70,7 +86,7 @@ def insert_lemma(db: Session, lemma: LemmaSchema) -> LemmaModel:
 	return lemma_to_insert
 
 
-def update_lemma(db: Session, lemma_id: int, lemma: LemmaSchema)-> LemmaModel:
+def update_lemma(lemma_id: int, lemma: LemmaSchema, db: Session)-> LemmaModel:
 	lemma_to_update = retrieve_or_die(db=db, lemma_id=lemma_id)
 	for key, value in lemma.__dict__.items():
 		setattr(lemma_to_update, key, value) 
@@ -81,7 +97,7 @@ def update_lemma(db: Session, lemma_id: int, lemma: LemmaSchema)-> LemmaModel:
 	return lemma_to_update
 
 
-def delete_lemma(db: Session, lemma_id: int) -> LemmaModel:
+def delete_lemma(lemma_id: int, db: Session) -> LemmaModel:
 	lemma_to_delete = retrieve_or_die(db=db, lemma_id=lemma_id)
 	db.delete(lemma_to_delete)
 	db.commit()

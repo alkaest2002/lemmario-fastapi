@@ -14,29 +14,35 @@ router = APIRouter(prefix="/lemmi")
 
 @router.get("/list", response_model=LemmaListSchema)
 async def list_lemmi(
-	offset: int | str | None = None,
+	filter_by: FieldEnum | None = None,
+	filter_value: str | None = None,
 	order_by: FieldEnum = FieldEnum.lemma,
-	order_dir: OrderDirEnum = OrderDirEnum.asc,
+	order_value: OrderDirEnum = OrderDirEnum.asc,
 	page_dir: PageDirEnum = PageDirEnum.next,
 	page_size: int = 5,
-	db: Session = Depends(get_db),
+	offset: int | str | None = None,
+	db: Session = Depends(get_db)
 ) -> LemmaListSchema:
 	lemmi = lemmi_crud.list_lemmi(
-		db=db,
-		offset=offset,
+		filter_by=filter_by,
+		filter_value=filter_value,
 		order_by=order_by,
-		order_dir=order_dir,
+		order_value=order_value,
 		page_dir=page_dir,
 		page_size=page_size+1,
+		offset=offset,
+		db=db,
 	)
 	data_to_return = dict(
 		data=lemmi,
 		metadata=dict(
-			offset=offset if len(lemmi) == page_size+1 else None,
+			filter_by=filter_by,
+			filter_value=filter_value,
 			order_by=order_by,
-			order_dir=order_dir,
+			order_value=order_value,
 			page_dir=page_dir,
-			page_size=page_size
+			page_size=page_size,
+			offset=offset if len(lemmi) == page_size+1 else None,
 		)
 	)
 	return data_to_return
@@ -44,24 +50,24 @@ async def list_lemmi(
 
 @router.get("/view/{lemma_id}")
 async def view_lemma(lemma_id: int, db: Session = Depends(get_db)) -> LemmaModel:
-	return lemmi_crud.view_lemma(db=db, lemma_id=lemma_id)
+	return lemmi_crud.view_lemma(lemma_id=lemma_id, db=db)
 
 
 @router.get("/search/{lemma}")
 async def search_lemma(lemma: constr(min_length=3), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSerachModel]:
-	return lemmi_crud.search_lemma(db=db, lemma=lemma, exact=exact)
+	return lemmi_crud.search_lemma(lemma=lemma, exact=exact, db=db)
 	
 
 @router.post("/insert", status_code=status.HTTP_201_CREATED)
 async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
-	return lemmi_crud.insert_lemma(db=db, lemma=lemma)
+	return lemmi_crud.insert_lemma(lemma=lemma, db=db)
 
 
 @router.put("/update/{lemma_id}")
 async def update_lemma(*, lemma_id: int, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:
-	return lemmi_crud.update_lemma(db=db, lemma_id=lemma_id, lemma=lemma)
+	return lemmi_crud.update_lemma(lemma_id=lemma_id, lemma=lemma, db=db)
 
 
 @router.post("/delete/{lemma_id}")
 async def delete_lemma(*, lemma_id: int, db: Session = Depends(get_db)) -> LemmaModel:
-	return lemmi_crud.delete_lemma(db=db, lemma_id=lemma_id)
+	return lemmi_crud.delete_lemma(lemma_id=lemma_id, db=db)

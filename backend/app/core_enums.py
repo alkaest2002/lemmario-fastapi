@@ -3,6 +3,7 @@ from enum import Enum
 
 class FieldEnum(str, Enum):
   lemma = "lemma"
+  letter = "letter"
   updated = "updated"
 
 
