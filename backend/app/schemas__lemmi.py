@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from core_enums import FieldEnum, OrderEnum
 
 class LemmaSchema(BaseModel):
 	lemma: str
@@ -17,11 +17,13 @@ class LemmaORMSchema(LemmaSchema):
 
 
 class LemmaSearchaMetadataSchema(BaseModel):
-	offset: int | str | None = None
-	order_by: str | None = None
-	order_dir: str | None = None
-	page_by: str | None = None
+	filter_by: FieldEnum | None = None
+	filter_value: str | None = None
+	order_by: FieldEnum | None = None
+	order_value: OrderEnum | None = None
+	page_dir: str | None = None
 	page_size: int = 5
+	offset: int | str | None = None
 
 
 class LemmaListSchema(BaseModel):

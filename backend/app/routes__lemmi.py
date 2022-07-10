@@ -3,7 +3,7 @@ from pydantic import constr
 from sqlalchemy.orm import Session
 
 from dependency__db import get_db
-from core_enums import FieldEnum, PageDirEnum, OrderDirEnum
+from core_enums import FieldEnum, PageDirEnum, OrderEnum
 
 import crud__lemmi as lemmi_crud
 from models__lemmi import LemmaModel, LemmaFullTextSerachModel
@@ -17,7 +17,7 @@ async def list_lemmi(
 	filter_by: FieldEnum | None = None,
 	filter_value: str | None = None,
 	order_by: FieldEnum = FieldEnum.lemma,
-	order_value: OrderDirEnum = OrderDirEnum.asc,
+	order_value: OrderEnum = OrderEnum.asc,
 	page_dir: PageDirEnum = PageDirEnum.next,
 	page_size: int = 5,
 	offset: int | str | None = None,

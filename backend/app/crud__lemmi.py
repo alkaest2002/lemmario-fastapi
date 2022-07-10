@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from models__lemmi import LemmaModel, LemmaFullTextSerachModel
 from schemas__lemmi import LemmaSchema
 
-from core_enums import PageDirEnum, OrderDirEnum
+from core_enums import PageDirEnum, OrderEnum
 
 def retrieve_or_die(db: Session, lemma_id: int):
 	lemma_to_check = db.query(LemmaModel).filter(LemmaModel.rowid == lemma_id).first()
@@ -31,24 +31,24 @@ def list_lemmi(
 	# define order_by_field to operate on
 	order_by_field = getattr(LemmaModel, order_by)
 	# add order by to query
-	if page_dir == PageDirEnum.next and order_value == OrderDirEnum.asc:
+	if page_dir == PageDirEnum.next and order_value == OrderEnum.asc:
 		q = q.order_by(order_by_field)
-	if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.desc:
+	if page_dir == PageDirEnum.prev and order_value == OrderEnum.desc:
 		q = q.order_by(order_by_field)
-	if page_dir == PageDirEnum.next and order_value == OrderDirEnum.desc:
+	if page_dir == PageDirEnum.next and order_value == OrderEnum.desc:
 		q = q.order_by(order_by_field.desc())
-	if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.asc:
+	if page_dir == PageDirEnum.prev and order_value == OrderEnum.asc:
 		q = q.order_by(order_by_field.desc())
 	# if offset is set
 	if offset:
 		# add offset clause to query
-		if page_dir == PageDirEnum.next and order_value == OrderDirEnum.asc:
+		if page_dir == PageDirEnum.next and order_value == OrderEnum.asc:
 			q = q.where(order_by_field >= offset)
-		if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.desc:
+		if page_dir == PageDirEnum.prev and order_value == OrderEnum.desc:
 			q = q.where(order_by_field >= offset)
-		if page_dir == PageDirEnum.next and order_value == OrderDirEnum.desc:
+		if page_dir == PageDirEnum.next and order_value == OrderEnum.desc:
 			q = q.where(order_by_field <= offset)
-		if page_dir == PageDirEnum.prev and order_value == OrderDirEnum.asc:
+		if page_dir == PageDirEnum.prev and order_value == OrderEnum.asc:
 			q = q.where(order_by_field <= offset)
 	# if filter is set
 	if (filter_by and filter_value):

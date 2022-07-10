@@ -12,6 +12,6 @@ class PageDirEnum(str, Enum):
   prev = "PREV"
 
 
-class OrderDirEnum(str, Enum):
+class OrderEnum(str, Enum):
   asc = "ASC"
   desc = "DESC"
