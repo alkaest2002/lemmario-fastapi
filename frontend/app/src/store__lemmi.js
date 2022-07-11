@@ -9,7 +9,7 @@ export const useLemmiStore = defineStore({
   id: "lemmi",
 
   state: () => ({
-    currentExpandendItem: null,
+    currentExpandendItemId: null,
     currentPage: {
       data: [],
       metadata: {
@@ -27,7 +27,7 @@ export const useLemmiStore = defineStore({
   actions: {
     async fetchLemmi() {
       const payload = Object.keys(this.currentPage.metadata).reduce((acc, itr) => {
-        if (this.metadata[itr])
+        if (this.currentPage.metadata[itr])
           acc[itr] = this.currentPage.metadata[itr];
         return acc
       }, {});
@@ -39,5 +39,7 @@ export const useLemmiStore = defineStore({
         return Promise.reject(error);
       }
     },
+
+    currentExpandendItem: (itemId) => this.currentExpandendItemId = itemId
   },
 });
