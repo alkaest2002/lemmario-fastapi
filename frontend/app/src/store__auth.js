@@ -3,6 +3,7 @@ import { fetchWrapper } from "./utils__fetch";
 
 const baseUrl = import.meta.env.VITE_API_URL;
 const authUrl = `${baseUrl}/utenti/login`;
+
 const { post } = fetchWrapper;
 
 export const useAuthStore = defineStore({
@@ -20,12 +21,8 @@ export const useAuthStore = defineStore({
   actions: {
     async login(username, password) {
       try {
-        const data = { body: { username, password }, isformUrlEncoded: true };
-        const { access_token: accessToken } = await post(
-          authUrl,
-          useAuthStore(),
-          data
-        );
+        const data = { payload: { username, password }, typeOfPayload: "formUrlEncoded" };
+        const { access_token: accessToken } = await post(authUrl, data);
         this.accessToken = accessToken;
         return Promise.resolve(true);
       } catch (error) {

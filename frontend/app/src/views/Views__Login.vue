@@ -3,7 +3,8 @@
     <h2 class="is-size-2 has-text-weight-bold mb-4">Login</h2>
     <Form
       v-slot="{ errors, isSubmitting, values: { username, password } }"
-      :validation-schema="schema"
+      :validation-schema="validationSchema"
+      :initial-values="{ username: 'p.calanna@gmail.com', password: 'PippoPazzoSulPezzo'}"
       @submit="onSubmit"
     >
       <div class="field">
@@ -70,7 +71,7 @@ configure({
   validateOnModelUpdate: true,
 });
 
-const schema = object().shape({
+const validationSchema = object().shape({
   username: string().email("email non valida").required("email richiesta"),
   password: string().required("password richiesta"),
 });
@@ -78,18 +79,14 @@ const schema = object().shape({
 const isLoading = ref(false);
 
 const onSubmit = async ({ username, password }, { setErrors }) => {
-  if (!(username && password)) {
+  try {
+    const authStore = useAuthStore();
+    const successfulLogin = await authStore.login(username, password);
+    router.push({ name: successfulLogin ? "route-home" : "route-login" });
+  } catch (error) {
+    setErrors({ apiError: error });
+  } finally {
     isLoading.value = false;
-  } else {
-    try {
-      const authStore = useAuthStore();
-      const successfulLogin = await authStore.login(username, password);
-      router.push({ name: successfulLogin ? "route-home" : "route-login" });
-    } catch (error) {
-      setErrors({ apiError: error });
-    } finally {
-      isLoading.value = false;
-    }
   }
 };
 </script>
