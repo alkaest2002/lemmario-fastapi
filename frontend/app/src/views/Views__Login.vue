@@ -14,7 +14,7 @@
             name="username"
             type="text"
             class="input"
-            placeholder="mario.rossi@gmail.com"
+            placeholder="mario.rossi@mail.com"
             :class="{ 'is-danger': errors.username }"
           />
           <div class="has-text-danger">
@@ -30,7 +30,7 @@
             name="password"
             type="password"
             class="input"
-            placeholder="password"
+            placeholder="password di mario rossi"
             :class="{ 'is-danger': errors.password }"
           />
           <div class="has-text-danger">
@@ -50,7 +50,7 @@
           </base-loading-button>
         </div>
       </div>
-      <div v-if="errors.apiError" class="alert alert-danger mt-3 mb-0">
+      <div v-if="errors.apiError" class="has-text-danger mt-3 mb-0">
         {{ errors.apiError }}
       </div>
     </Form>
@@ -60,14 +60,14 @@
 <script setup>
 import { ref } from "vue";
 import { configure, Form, Field } from "vee-validate";
-import * as Yup from "yup";
+import { object, string } from 'yup';
 
 import { useAuthStore } from "../store__auth";
 import { router } from "../router__main";
 
-const schema = Yup.object().shape({
-  username: Yup.string().email("email non valida").required("email richiesta"),
-  password: Yup.string().required("password richiesta"),
+const schema = object().shape({
+  username: string().email("email non valida").required("email richiesta"),
+  password: string().required("password richiesta"),
 });
 
 configure({
