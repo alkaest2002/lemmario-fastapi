@@ -12,8 +12,8 @@ def add_middlewares(app: FastAPI):
   app.add_middleware(
       CORSMiddleware,
       allow_origins=[
-          "http://localhost",
-          "http://localhost:3000",
+        "http://localhost",
+        "http://localhost:3000",
       ],
       allow_credentials=True,
       allow_methods=["*"],
@@ -22,7 +22,7 @@ def add_middlewares(app: FastAPI):
 
   @app.middleware("http")
   async def add_security(request: Request, call_next):
-    if (re.search("lemmi|scrape", request.url.path)):
+    if (re.search("lemmi|scrape", request.url.path) and request.method != "OPTIONS"):
       try:
         token = JWTBearer()
         await token(request)
