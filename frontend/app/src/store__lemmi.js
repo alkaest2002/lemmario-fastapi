@@ -9,28 +9,31 @@ export const useLemmiStore = defineStore({
   id: "lemmi",
 
   state: () => ({
-    data: [],
-		metadata: {
-			filter_by: null,
-			filter_value: null,
-			order_by: "lemma",
-			order_value: "ASC",
-			page_dir: "NEXT",
-			page_size: 10,
-			offset: null,
+    currentExpandendItem: null,
+    currentPage: {
+      data: [],
+      metadata: {
+        filter_by: null,
+        filter_value: null,
+        order_by: "lemma",
+        order_value: "ASC",
+        page_dir: "NEXT",
+        page_size: 10,
+        offset: null,
+      }
     }
   }),
 
   actions: {
     async fetchLemmi() {
-      const payload = Object.keys(this.metadata).reduce((acc, itr) => {
+      const payload = Object.keys(this.currentPage.metadata).reduce((acc, itr) => {
         if (this.metadata[itr])
-          acc[itr] = this.metadata[itr];
+          acc[itr] = this.currentPage.metadata[itr];
         return acc
       }, {});
       try {
-        const data = await get(`${lemmiUrl}/list`, { payload });
-        this.$state = data;
+        const page = await get(`${lemmiUrl}/list`, { payload });
+        this.currentPage = page;
         return Promise.resolve(true);
       } catch (error) {
         return Promise.reject(error);

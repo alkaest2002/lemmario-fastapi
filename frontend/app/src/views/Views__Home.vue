@@ -25,7 +25,7 @@ import { useLemmiStore } from "../store__lemmi";
 
 const lemmiStore = useLemmiStore();
 
-const lemmi = computed(() => lemmiStore.data);
+const lemmi = computed(() => lemmiStore.currentPage.data);
 
 onMounted(async () => {
   try {
