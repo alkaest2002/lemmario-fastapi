@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { fetchWrapper } from "./utils__fetch";
 
 const baseUrl = import.meta.env.VITE_API_URL;
-const lemmiUrl = `${baseUrl}/lemmi/`;
+const lemmiUrl = `${baseUrl}/lemmi`;
 const { get } = fetchWrapper;
 
 export const useLemmiStore = defineStore({
@@ -22,10 +22,15 @@ export const useLemmiStore = defineStore({
   }),
 
   actions: {
-    async load_data() {
+    async fetchLemmi() {
+      const payload = Object.keys(this.metadata).reduce((acc, itr) => {
+        if (this.metadata[itr])
+          acc[itr] = this.metadata[itr];
+        return acc
+      }, {});
       try {
-        const payload = await get(lemmiUrl);
-        this.state = payload;
+        const data = await get(`${lemmiUrl}/list`, { payload });
+        this.$state = data;
         return Promise.resolve(true);
       } catch (error) {
         return Promise.reject(error);

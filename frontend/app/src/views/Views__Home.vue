@@ -1,32 +1,35 @@
 <template>
   <div>
     <h2 class="is-size-2 has-text-weight-bold mb-4">Home</h2>
-    {{ lemmi }}
+    <div class="is-flex is-flex-direction-column is-justify-content-center">
+      <div 
+        v-for="lemma of lemmi" :key="lemma.rowid"
+        class="card my-2"
+      >
+        <div class="card-content">
+          <p class="is-size-5 has-text-weight-bold">
+            {{ lemma.lemma }}
+          </p>
+          <p>
+            {{ lemma.definition }}
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useLemmiStore } from "../store__lemmi";
-import { fetchWrapper } from "../utils__fetch";
-
-const { get } = fetchWrapper;
-const baseUrl = import.meta.env.VITE_API_URL;
-const lemmiUrl = `${baseUrl}/lemmi/list`;
 
 const lemmiStore = useLemmiStore();
-const lemmi = ref(null);
+
+const lemmi = computed(() => lemmiStore.data);
 
 onMounted(async () => {
-  const payload = Object.keys(lemmiStore.metadata).reduce((acc, itr) => {
-    if (lemmiStore.metadata[itr])
-      acc[itr] = lemmiStore.metadata[itr];
-    return acc
-  }, {});
-  console.log(payload)
-  const data = { payload };
   try {
-    lemmi.value = await get(lemmiUrl, data)
+    await lemmiStore.fetchLemmi()
   } catch(error) {
     console.log(error)
   }
