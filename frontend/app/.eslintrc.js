@@ -6,5 +6,6 @@ module.exports = {
   rules: {
     // override/add rules settings here, such as:
     "vue/max-attributes-per-line": "off",
+    "vue/singleline-html-element-content-newline": "off"
   },
 };
