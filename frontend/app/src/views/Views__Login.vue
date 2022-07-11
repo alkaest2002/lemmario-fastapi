@@ -2,15 +2,14 @@
   <div>
     <h2 class="is-size-2 has-text-weight-bold mb-4">Login</h2>
     <Form
-      v-slot="{ errors, isSubmitting, setErrors }"
+      v-slot="{ errors, isSubmitting, values: { username, password } }"
       :validation-schema="schema"
-      @submit.prevent=""
+      @submit="onSubmit"
     >
       <div class="field">
         <label class="label">Email</label>
         <div class="control">
           <Field
-            v-model="username"
             name="username"
             type="text"
             class="input"
@@ -26,7 +25,6 @@
         <label class="label">Password</label>
         <div class="control">
           <Field
-            v-model="password"
             name="password"
             type="password"
             class="input"
@@ -42,9 +40,9 @@
         <div class="control">
           <base-loading-button
             v-model="isLoading"
+            :type="'submit'"
             :button-css="'is-info'"
             :disabled="isSubmitting || !(username && password)"
-            @click="onSubmit(setErrors)"
           >
             Effettua login
           </base-loading-button>
@@ -60,15 +58,10 @@
 <script setup>
 import { ref } from "vue";
 import { configure, Form, Field } from "vee-validate";
-import { object, string } from 'yup';
+import { object, string } from "yup";
 
 import { useAuthStore } from "../store__auth";
 import { router } from "../router__main";
-
-const schema = object().shape({
-  username: string().email("email non valida").required("email richiesta"),
-  password: string().required("password richiesta"),
-});
 
 configure({
   validateOnBlur: false,
@@ -77,26 +70,26 @@ configure({
   validateOnModelUpdate: true,
 });
 
-const isLoading = ref(false);
-const username = ref("");
-const password = ref("");
+const schema = object().shape({
+  username: string().email("email non valida").required("email richiesta"),
+  password: string().required("password richiesta"),
+});
 
-const onSubmit = async (setErrors) => {
-  if (!(username.value && password.value)) {
+const isLoading = ref(false);
+
+const onSubmit = async ({ username, password }, { setErrors }) => {
+  if (!(username && password)) {
     isLoading.value = false;
-    return;
-  }
-  try {
-    const authStore = useAuthStore();
-    const successfulLogin = await authStore.login(
-      username.value,
-      password.value
-    );
-    router.push({ name: successfulLogin ? "route-home" : "route-login" });
-  } catch (error) {
-    setErrors({ apiError: error });
-  } finally {
-    isLoading.value = false;
+  } else {
+    try {
+      const authStore = useAuthStore();
+      const successfulLogin = await authStore.login(username, password);
+      router.push({ name: successfulLogin ? "route-home" : "route-login" });
+    } catch (error) {
+      setErrors({ apiError: error });
+    } finally {
+      isLoading.value = false;
+    }
   }
 };
 </script>
