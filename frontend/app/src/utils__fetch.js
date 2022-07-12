@@ -1,17 +1,19 @@
 import { useAuthStore } from "./store__auth";
 
 const request =
-(method) =>
+  (method) =>
   async (url, data = null) => {
     const requestOptions = { method, headers: authHeader(url) };
     if (["POST", "PUT"].indexOf(method) > -1) {
       const { payload, typeOfPayload } = data;
-      requestOptions.headers["Content-Type"] = typeOfPayload == "formUrlEncoded"
-        ? "application/x-www-form-urlencoded"
-        : "application/json";
-      requestOptions.body = typeOfPayload == "formUrlEncoded" 
-        ? new URLSearchParams(payload) 
-        : payload;
+      requestOptions.headers["Content-Type"] =
+        typeOfPayload == "formUrlEncoded"
+          ? "application/x-www-form-urlencoded"
+          : "application/json";
+      requestOptions.body =
+        typeOfPayload == "formUrlEncoded"
+          ? new URLSearchParams(payload)
+          : payload;
     } else {
       if (data) {
         const queryParams = new URLSearchParams(data.payload);

@@ -27,6 +27,5 @@ watch(sorting, async (newValue, oldValue) => {
     lemmiStore.currentPage.metadata.order_value = order_value;
     await lemmiStore.fetchLemmi();
   }
-})
-
+});
 </script>

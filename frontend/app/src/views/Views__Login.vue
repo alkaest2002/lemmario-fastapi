@@ -4,7 +4,10 @@
     <Form
       v-slot="{ errors, isSubmitting, values: { username, password } }"
       :validation-schema="validationSchema"
-      :initial-values="{ username: 'p.calanna@gmail.com', password: 'PippoPazzoSulPezzo'}"
+      :initial-values="{
+        username: 'p.calanna@gmail.com',
+        password: 'PippoPazzoSulPezzo',
+      }"
       @submit="onSubmit"
     >
       <div class="field">

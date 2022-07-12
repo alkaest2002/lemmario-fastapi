@@ -6,9 +6,9 @@
       <lemmi-paginator />
     </div>
     <div class="is-flex is-flex-direction-column is-justify-content-center">
-      <lemma-card 
-        v-for="lemma of lemmi" 
-        :key="lemma.rowid" 
+      <lemma-card
+        v-for="lemma of lemmi"
+        :key="lemma.rowid"
         v-model="clickedLemma"
         :lemma="lemma"
       />
@@ -29,18 +29,22 @@ import LemmiSorter from "./Views__Home__sorter.vue";
 
 const lemmiStore = useLemmiStore();
 
-const lemmi = computed(() => lemmiStore.currentPage.data.slice(0,-1));
+const lemmi = computed(() => lemmiStore.currentPage.data.slice(0, -1));
 
 const clickedLemma = computed({
-  get() { return lemmiStore.currentExpandendItemId },
-  set(value) { lemmiStore.currentExpandendItemId = value }
-}); 
+  get() {
+    return lemmiStore.currentExpandendItemId;
+  },
+  set(value) {
+    lemmiStore.currentExpandendItemId = value;
+  },
+});
 
 onMounted(async () => {
   try {
-    await lemmiStore.fetchLemmi()
-  } catch(error) {
-    console.log(error)
+    await lemmiStore.fetchLemmi();
+  } catch (error) {
+    console.log(error);
   }
 });
 </script>

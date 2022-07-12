@@ -21,18 +21,20 @@ export const useLemmiStore = defineStore({
         page_dir: "NEXT",
         page_size: 10,
         offset: null,
-      }
-    }
+      },
+    },
   }),
 
   actions: {
-    
     async fetchLemmi() {
-      const payload = Object.keys(this.currentPage.metadata).reduce((acc, itr) => {
-        if (this.currentPage.metadata[itr])
-          acc[itr] = this.currentPage.metadata[itr];
-        return acc
-      }, {});
+      const payload = Object.keys(this.currentPage.metadata).reduce(
+        (acc, itr) => {
+          if (this.currentPage.metadata[itr])
+            acc[itr] = this.currentPage.metadata[itr];
+          return acc;
+        },
+        {}
+      );
       try {
         const page = await get(`${lemmiUrl}/list`, { payload });
         this.currentPage = page;
@@ -43,11 +45,11 @@ export const useLemmiStore = defineStore({
     },
 
     currentExpandendItem(itemId) {
-      this.currentExpandendItemId = itemId
+      this.currentExpandendItemId = itemId;
     },
 
     updateCurrentPageNumber(pageDirection) {
-      this.currentPageNumber += pageDirection === "NEXT" ? +1 : -1
-    }
+      this.currentPageNumber += pageDirection === "NEXT" ? +1 : -1;
+    },
   },
 });

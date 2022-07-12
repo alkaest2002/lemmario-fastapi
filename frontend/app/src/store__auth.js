@@ -21,7 +21,10 @@ export const useAuthStore = defineStore({
   actions: {
     async login(username, password) {
       try {
-        const data = { payload: { username, password }, typeOfPayload: "formUrlEncoded" };
+        const data = {
+          payload: { username, password },
+          typeOfPayload: "formUrlEncoded",
+        };
         const { access_token: accessToken } = await post(authUrl, data);
         this.accessToken = accessToken;
         return Promise.resolve(true);
