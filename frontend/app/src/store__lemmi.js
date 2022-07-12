@@ -9,6 +9,7 @@ export const useLemmiStore = defineStore({
   id: "lemmi",
 
   state: () => ({
+    currentPageNumber: 1,
     currentExpandendItemId: null,
     currentPage: {
       data: [],
@@ -25,6 +26,7 @@ export const useLemmiStore = defineStore({
   }),
 
   actions: {
+    
     async fetchLemmi() {
       const payload = Object.keys(this.currentPage.metadata).reduce((acc, itr) => {
         if (this.currentPage.metadata[itr])
@@ -40,6 +42,12 @@ export const useLemmiStore = defineStore({
       }
     },
 
-    currentExpandendItem: (itemId) => this.currentExpandendItemId = itemId
+    currentExpandendItem(itemId) {
+      this.currentExpandendItemId = itemId
+    },
+
+    updateCurrentPageNumber(pageDirection) {
+      this.currentPageNumber += pageDirection === "NEXT" ? +1 : -1
+    }
   },
 });

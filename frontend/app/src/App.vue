@@ -13,10 +13,10 @@ import { watch } from "vue";
 import { useAuthStore } from "./store__auth";
 import { router } from "./router__main";
 
-const auth = useAuthStore();
+const authStore = useAuthStore();
 
 watch(
-  () => auth.accessToken,
+  () => authStore.accessToken,
   (newValue) => {
     if (newValue == null) router.push({ name: "route-login" });
   }

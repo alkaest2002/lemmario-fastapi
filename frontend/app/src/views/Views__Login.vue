@@ -80,8 +80,8 @@ const isLoading = ref(false);
 
 const onSubmit = async ({ username, password }, { setErrors }) => {
   try {
-    const authStore = useAuthStore();
-    const successfulLogin = await authStore.login(username, password);
+    const { login } = useAuthStore();
+    const successfulLogin = await login(username, password);
     router.push({ name: successfulLogin ? "route-home" : "route-login" });
   } catch (error) {
     setErrors({ apiError: error });

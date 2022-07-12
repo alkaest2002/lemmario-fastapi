@@ -39,7 +39,7 @@ const isExpanded = computed(() => props.modelValue == props.lemma.rowid)
   .card-content {
     
     > p:nth-child(2) {
-      height: 50px;
+      height: 145px;
       overflow: hidden;
       text-overflow: ellipsis;
 
