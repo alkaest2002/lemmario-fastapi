@@ -1,15 +1,20 @@
 <template>
-  <nav class="pagination is-medium is-rounded" role="navigation" aria-label="pagination">
-    <a 
-      class="pagination-previous"
-      :class="{ 'is-disabled' : lemmiStore.currentPageNumber == 1 }"
-      @click="onClickNav('PREV')"
-    >Prec</a>
-    <a 
-      class="pagination-next"
-      @click="onClickNav('NEXT')"
-    >Succ</a>
-  </nav>
+  <div class="buttons are-medium">
+    <button 
+      class="button is-link"
+      :disabled="lemmiStore.currentPageNumber == 1"
+      @click.prevent="onClickNav('PREV')"
+    >
+      Prec
+    </button>
+    <button 
+      class="button is-link"
+      :disabled="lemmiStore.currentPage.data.length < lemmiStore.currentPage.metadata.page_size + 1"
+      @click.prevent="onClickNav('NEXT')"
+    >
+      Succ
+    </button>
+  </div>
 </template>
 
 <script setup>

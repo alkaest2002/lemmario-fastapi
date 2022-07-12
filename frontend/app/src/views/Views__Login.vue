@@ -13,7 +13,7 @@
           <Field
             name="username"
             type="text"
-            class="input"
+            class="input is-medium"
             placeholder="mario.rossi@mail.com"
             :class="{ 'is-danger': errors.username }"
           />
@@ -28,7 +28,7 @@
           <Field
             name="password"
             type="password"
-            class="input"
+            class="input is-medium"
             placeholder="password di mario rossi"
             :class="{ 'is-danger': errors.password }"
           />
@@ -42,7 +42,7 @@
           <base-loading-button
             v-model="isLoading"
             :type="'submit'"
-            :button-css="'is-info'"
+            :button-css="'is-medium is-info'"
             :disabled="isSubmitting || !(username && password)"
           >
             Effettua login
