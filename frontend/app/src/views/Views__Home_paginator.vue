@@ -1,14 +1,14 @@
 <template>
-  <div class="buttons are-medium">
+  <div class="ml-2 buttons are-medium">
     <button 
-      class="button is-link"
+      class="button is-info"
       :disabled="lemmiStore.currentPageNumber == 1"
       @click.prevent="onClickNav('PREV')"
     >
       Prec
     </button>
     <button 
-      class="button is-link"
+      class="button is-info"
       :disabled="lemmiStore.currentPage.data.length < lemmiStore.currentPage.metadata.page_size + 1"
       @click.prevent="onClickNav('NEXT')"
     >
@@ -30,5 +30,10 @@ const onClickNav = async (pageDirection) => {
     : lemmiStore.currentPage.data[0][lemmiStore.currentPage.metadata.order_by];
   await lemmiStore.fetchLemmi();
 };
-
 </script>
+
+<style lang="scss" scoped>
+  button {
+    min-width: 85px;
+  }
+</style>
