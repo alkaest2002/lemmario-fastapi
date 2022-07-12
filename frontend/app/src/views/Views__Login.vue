@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class="field">
+      <div class="field mt-5">
         <div class="control">
           <base-loading-button
             v-model="isLoading"

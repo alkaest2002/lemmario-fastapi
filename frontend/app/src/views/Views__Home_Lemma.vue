@@ -5,7 +5,13 @@
   >
     <div class="card-content">
       <p class="lemma is-size-5 has-text-weight-bold">
-        {{ lemma.lemma }} {{ isOverFlown }}
+        {{ lemma.lemma }}
+      </p>
+      <p 
+        v-if="isOverFlown"
+        class="subtitle is-6 has-text-grey"
+      >
+        clicca per espandere lemma
       </p>
       <p
         ref="defintionParagraph"
@@ -20,7 +26,7 @@
 
 <script setup>
 /* eslint-disable no-unused-vars */
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 
 const emit = defineEmits({
   "update:modelValue": (value) => typeof value == "number",
@@ -40,17 +46,22 @@ const props = defineProps({
 
 const defintionParagraph = ref(null);
 
-const isOverflown = (el) => {
-  if (el) {
-    const { clientHeight, scrollHeight } = el;
-    return scrollHeight > clientHeight;
-  }
-  return false;
+const isOverFlown = ref(false);
+
+const markAsOverflownIfNecessary = ({ clientHeight, scrollHeight }) => {
+  isOverFlown.value = scrollHeight > clientHeight;
 };
 
 const isExpanded = computed(() => props.modelValue == props.lemma.rowid);
 
-const isOverFlown = computed(() => isOverflown(defintionParagraph.value));
+onMounted(() => {
+  markAsOverflownIfNecessary(defintionParagraph.value);
+  window.addEventListener("resize", () => { markAsOverflownIfNecessary(defintionParagraph.value) });
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", markAsOverflownIfNecessary)
+});
 </script>
 
 <style lang="scss" scoped>
@@ -59,7 +70,7 @@ const isOverFlown = computed(() => isOverflown(defintionParagraph.value));
     text-transform: uppercase;
   }
 
-  > p:nth-child(2) {
+  > .definition {
     display: block;
     max-height: 145px;
     overflow: hidden;
