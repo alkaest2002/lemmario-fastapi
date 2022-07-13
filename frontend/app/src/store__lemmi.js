@@ -27,10 +27,11 @@ export const useLemmiStore = defineStore({
 
   getters: {
     currentSelectedLemma: (state) => {
-      if (!state.currentSelectedLemmaId)
-        return null;
-      return state.currentPage.data.find((elm) => elm.rowid == state.currentSelectedLemmaId)
-    }
+      if (!state.currentSelectedLemmaId) return null;
+      return state.currentPage.data.find(
+        (elm) => elm.rowid == state.currentSelectedLemmaId
+      );
+    },
   },
 
   actions: {

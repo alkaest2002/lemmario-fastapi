@@ -1,8 +1,13 @@
 <template>
   <div
     class="card my-2 is-clickable"
-    @click="emit('on-select-lemma', 
-      { lemmaId: lemma.rowid, className: defintionParagraph.className, isOverFlown })"
+    @click="
+      emit('on-select-lemma', {
+        lemmaId: lemma.rowid,
+        isExpanded: isSelected && isOverFlown,
+        isOverFlown,
+      })
+    "
   >
     <div class="card-content">
       <p class="lemma is-size-5 has-text-weight-bold">
@@ -35,11 +40,11 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  
+
   selectedLemmaId: {
     type: [Number, null],
-    default: null
-  }
+    default: null,
+  },
 });
 
 const defintionParagraph = ref(null);

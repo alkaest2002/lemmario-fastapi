@@ -35,15 +35,11 @@ const lemmiStore = useLemmiStore();
 
 const lemmi = computed(() => lemmiStore.currentPage.data.slice(0, -1));
 
-const onSelectLemma = ({ lemmaId, className, isOverFlown }) => {
+const onSelectLemma = ({ lemmaId, isExpanded, isOverFlown }) => {
   lemmiStore.currentSelectedLemmaId = lemmaId;
-  if (className.indexOf("is-expanded") > -1) {
-    router.push({ name: "route-edit-lemma"});
-  } else {
-    if (!isOverFlown)
-      router.push({ name: "route-edit-lemma"});
-  }
-}
+  if ([isExpanded, !isExpanded && !isOverFlown].some(Boolean))
+    router.push({ name: "route-edit-lemma" });
+};
 
 onMounted(async () => {
   try {
