@@ -10,8 +10,7 @@
 </template>
 
 <script setup>
-/* eslint-disable no-unused-vars */
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { useLemmiStore } from "../store__lemmi";
 
 const lemmiStore = useLemmiStore();
@@ -23,8 +22,7 @@ const sorting = computed({
     return "lemma ASC";
   },
   set: async (newSorting) => {
-    const currentSorting = 
-      `${lemmiStore.currentPage.metadata.order_by} ${lemmiStore.currentPage.metadata.order_value}`;
+    const currentSorting = `${lemmiStore.currentPage.metadata.order_by} ${lemmiStore.currentPage.metadata.order_value}`;
     if (newSorting !== currentSorting) {
       const [order_by, order_value] = newSorting.split(" ");
       lemmiStore.currentPageNumber = 1;
@@ -34,6 +32,6 @@ const sorting = computed({
       lemmiStore.currentPage.metadata.order_value = order_value;
       await lemmiStore.fetchLemmi();
     }
-  }
+  },
 });
 </script>

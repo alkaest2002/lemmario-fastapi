@@ -7,10 +7,7 @@
       <p class="lemma is-size-5 has-text-weight-bold">
         {{ lemma.lemma }}
       </p>
-      <p 
-        v-if="isOverFlown"
-        class="subtitle is-6 has-text-grey"
-      >
+      <p v-if="isOverFlown" class="subtitle is-6 has-text-grey">
         clicca per espandere lemma
       </p>
       <p
@@ -56,11 +53,13 @@ const isExpanded = computed(() => props.modelValue == props.lemma.rowid);
 
 onMounted(() => {
   markAsOverflownIfNecessary(defintionParagraph.value);
-  window.addEventListener("resize", () => { markAsOverflownIfNecessary(defintionParagraph.value) });
+  window.addEventListener("resize", () => {
+    markAsOverflownIfNecessary(defintionParagraph.value);
+  });
 });
 
 onUnmounted(() => {
-  window.removeEventListener("resize", markAsOverflownIfNecessary)
+  window.removeEventListener("resize", markAsOverflownIfNecessary);
 });
 </script>
 
