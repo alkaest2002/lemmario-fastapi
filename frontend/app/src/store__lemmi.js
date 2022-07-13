@@ -10,7 +10,7 @@ export const useLemmiStore = defineStore({
 
   state: () => ({
     currentPageNumber: 1,
-    currentExpandendItemId: null,
+    currentSelectedLemmaId: null,
     currentPage: {
       data: [],
       metadata: {
@@ -24,6 +24,14 @@ export const useLemmiStore = defineStore({
       },
     },
   }),
+
+  getters: {
+    currentSelectedLemma: (state) => {
+      if (!state.currentSelectedLemmaId)
+        return null;
+      return state.currentPage.data.find((elm) => elm.rowid == state.currentSelectedLemmaId)
+    }
+  },
 
   actions: {
     async fetchLemmi() {
@@ -45,7 +53,7 @@ export const useLemmiStore = defineStore({
     },
 
     currentExpandendItem(itemId) {
-      this.currentExpandendItemId = itemId;
+      this.currentSelectedLemmaId = itemId;
     },
 
     updateCurrentPageNumber(pageDirection) {
