@@ -10,22 +10,30 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+/* eslint-disable no-unused-vars */
+import { computed, watch } from "vue";
 import { useLemmiStore } from "../store__lemmi";
 
 const lemmiStore = useLemmiStore();
 
-const sorting = ref("lemma ASC");
-
-watch(sorting, async (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    const [order_by, order_value] = newValue.split(" ");
-    lemmiStore.currentPageNumber = 1;
-    lemmiStore.currentPage.metadata.offset = null;
-    lemmiStore.currentPage.metadata.page_dir = "NEXT";
-    lemmiStore.currentPage.metadata.order_by = order_by;
-    lemmiStore.currentPage.metadata.order_value = order_value;
-    await lemmiStore.fetchLemmi();
+const sorting = computed({
+  get: () => {
+    if (lemmiStore.currentPage.metadata.order_by)
+      return `${lemmiStore.currentPage.metadata.order_by} ${lemmiStore.currentPage.metadata.order_value}`;
+    return "lemma ASC";
+  },
+  set: async (newSorting) => {
+    const currentSorting = 
+      `${lemmiStore.currentPage.metadata.order_by} ${lemmiStore.currentPage.metadata.order_value}`;
+    if (newSorting !== currentSorting) {
+      const [order_by, order_value] = newSorting.split(" ");
+      lemmiStore.currentPageNumber = 1;
+      lemmiStore.currentPage.metadata.offset = null;
+      lemmiStore.currentPage.metadata.page_dir = "NEXT";
+      lemmiStore.currentPage.metadata.order_by = order_by;
+      lemmiStore.currentPage.metadata.order_value = order_value;
+      await lemmiStore.fetchLemmi();
+    }
   }
 });
 </script>
