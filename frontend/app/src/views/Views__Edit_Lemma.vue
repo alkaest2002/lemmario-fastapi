@@ -1,5 +1,8 @@
 <template>
-  {{ selectedLemma }}
+  <div>
+    <h2 class="is-size-2 has-text-weight-bold mb-4">Home</h2>
+    {{ selectedLemma }}
+  </div>
 </template>
 
 <script setup>

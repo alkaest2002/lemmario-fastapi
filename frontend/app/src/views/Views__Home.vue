@@ -9,9 +9,9 @@
       <lemma-card
         v-for="lemma of lemmi"
         :key="lemma.rowid"
-        v-model="clickedLemma"
         :lemma="lemma"
-        @click="router.push({ name: 'route-edit-lemma' })"
+        :selected-lemma-id="lemmiStore.currentSelectedLemmaId"
+        @on-select-lemma="onSelectLemma"
       />
     </div>
     <div class="is-flex is-justify-content-space-between mt-3">
@@ -22,7 +22,6 @@
 </template>
 
 <script setup>
-/* eslint-disable no-unused-vars */
 import { computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useLemmiStore } from "../store__lemmi";
@@ -36,14 +35,15 @@ const lemmiStore = useLemmiStore();
 
 const lemmi = computed(() => lemmiStore.currentPage.data.slice(0, -1));
 
-const clickedLemma = computed({
-  get() {
-    return lemmiStore.currentSelectedLemmaId;
-  },
-  set(value) {
-    lemmiStore.currentSelectedLemmaId = value;
-  },
-});
+const onSelectLemma = ({ lemmaId, className, isOverFlown }) => {
+  lemmiStore.currentSelectedLemmaId = lemmaId;
+  if (className.indexOf("is-expanded") > -1) {
+    router.push({ name: "route-edit-lemma"});
+  } else {
+    if (!isOverFlown)
+      router.push({ name: "route-edit-lemma"});
+  }
+}
 
 onMounted(async () => {
   try {

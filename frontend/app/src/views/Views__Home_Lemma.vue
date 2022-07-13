@@ -1,7 +1,8 @@
 <template>
   <div
     class="card my-2 is-clickable"
-    @click="emit('update:modelValue', lemma.rowid)"
+    @click="emit('on-select-lemma', 
+      { lemmaId: lemma.rowid, className: defintionParagraph.className, isOverFlown })"
   >
     <div class="card-content">
       <p class="lemma is-size-5 has-text-weight-bold">
@@ -13,7 +14,7 @@
       <p
         ref="defintionParagraph"
         class="definition"
-        :class="{ 'is-expanded': isExpanded }"
+        :class="{ 'is-expanded': isSelected && isOverFlown }"
       >
         {{ lemma.definition }}
       </p>
@@ -26,19 +27,19 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 
 const emit = defineEmits({
-  "update:modelValue": (value) => typeof value == "number",
+  "on-select-lemma": (value) => typeof value == "object",
 });
 
 const props = defineProps({
-  modelValue: {
-    type: Number,
-    default: null,
-  },
-
   lemma: {
     type: Object,
     required: true,
   },
+  
+  selectedLemmaId: {
+    type: [Number, null],
+    default: null
+  }
 });
 
 const defintionParagraph = ref(null);
@@ -49,7 +50,7 @@ const markAsOverflownIfNecessary = ({ clientHeight, scrollHeight }) => {
   isOverFlown.value = scrollHeight > clientHeight;
 };
 
-const isExpanded = computed(() => props.modelValue == props.lemma.rowid);
+const isSelected = computed(() => props.selectedLemmaId == props.lemma.rowid);
 
 onMounted(() => {
   markAsOverflownIfNecessary(defintionParagraph.value);
