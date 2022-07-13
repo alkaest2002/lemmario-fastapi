@@ -6,7 +6,7 @@
       :validation-schema="validationSchema"
       :initial-values="{
         username: 'p.calanna@gmail.com',
-        password: 'PippoPazzoSulPezzo',
+        password: '',
       }"
       @submit="onSubmit"
     >
