@@ -11,6 +11,7 @@
         :key="lemma.rowid"
         v-model="clickedLemma"
         :lemma="lemma"
+        @click="router.push({ name: 'route-edit-lemma' })"
       />
     </div>
     <div class="is-flex is-justify-content-space-between mt-3">
@@ -21,11 +22,15 @@
 </template>
 
 <script setup>
+/* eslint-disable no-unused-vars */
 import { computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useLemmiStore } from "../store__lemmi";
 import LemmaCard from "./Views__Home_Lemma.vue";
 import LemmiPaginator from "./Views__Home_paginator.vue";
 import LemmiSorter from "./Views__Home__sorter.vue";
+
+const router = useRouter();
 
 const lemmiStore = useLemmiStore();
 
@@ -33,10 +38,10 @@ const lemmi = computed(() => lemmiStore.currentPage.data.slice(0, -1));
 
 const clickedLemma = computed({
   get() {
-    return lemmiStore.currentExpandendItemId;
+    return lemmiStore.currentSelectedLemmaId;
   },
   set(value) {
-    lemmiStore.currentExpandendItemId = value;
+    lemmiStore.currentSelectedLemmaId = value;
   },
 });
 

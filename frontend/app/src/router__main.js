@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "./store__auth";
 import HomeView from "./views/Views__Home.vue";
 import LoginView from "./views/Views__Login.vue";
+import EditLemmaView from "./views/Views__Edit_Lemma.vue";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,6 +11,7 @@ export const router = createRouter({
   routes: [
     { name: "route-home", path: "/", component: HomeView },
     { name: "route-login", path: "/login", component: LoginView },
+    { name: "route-edit-lemma", path: "/edit", component: EditLemmaView },
   ],
 });
 
