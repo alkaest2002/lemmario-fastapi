@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import { fetchWrapper } from "./utils__fetch";
-
-const baseUrl = import.meta.env.VITE_API_URL;
-const authUrl = `${baseUrl}/utenti/login`;
+import { authUrl } from "./utils__urls";
 
 const { post } = fetchWrapper;
 

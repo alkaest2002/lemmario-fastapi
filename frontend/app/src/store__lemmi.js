@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 import { fetchWrapper } from "./utils__fetch";
+import { lemmiUrl } from "./utils__urls";
 
-const baseUrl = import.meta.env.VITE_API_URL;
-const lemmiUrl = `${baseUrl}/lemmi`;
 const { get } = fetchWrapper;
 
 export const useLemmiStore = defineStore({

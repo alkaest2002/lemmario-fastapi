@@ -69,15 +69,13 @@ import { ref, onMounted } from "vue";
 import { configure, Form, Field } from "vee-validate";
 import { object, string } from "yup";
 
-import { fetchWrapper } from "../utils__fetch";
 import { useLemmiStore } from "../store__lemmi";
+import { fetchWrapper } from "../utils__fetch";
+import { editUrl, deleteUrl } from "../utils__urls";
 
 const lemmiStore = useLemmiStore();
 
-const baseUrl = import.meta.env.VITE_API_URL;
-const editUrl = `${baseUrl}/lemmi/update`;
-
-const { put } = fetchWrapper;
+const { put, del } = fetchWrapper;
 
 configure({
   validateOnBlur: false,
@@ -95,9 +93,8 @@ let selectedLemma = lemmiStore.currentSelectedLemma;
 
 const isLoading = ref(false);
 
-const onSubmitForm = async ({ lemma, definition }, { setErrors }) => {
+const onSubmitForm = async (payload, { setErrors }) => {
   try {
-    const payload = { lemma, definition };
     await put(`${editUrl}/${selectedLemma.rowid}`, { payload });
   } catch (error) {
     setErrors({ apiError: error });
@@ -106,8 +103,14 @@ const onSubmitForm = async ({ lemma, definition }, { setErrors }) => {
   }
 };
 
-const onDeleteLemma = () => {
-  isLoading.value = false;
+const onDeleteLemma = async (_, { setErrors }) => {
+  try {
+    await del(`${deleteUrl}/${selectedLemma.rowid}`);
+  } catch (error) {
+    setErrors({ apiError: error });
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 onMounted(() => {

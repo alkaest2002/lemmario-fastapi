@@ -10,12 +10,6 @@
   </button>
 </template>
 
-<script>
-export default {
-  name: "LoadingButton",
-};
-</script>
-
 <script setup>
 /* eslint-disable no-unused-vars, no-undef */
 import { computed } from "vue";
