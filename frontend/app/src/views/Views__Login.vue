@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="is-size-2 has-text-weight-bold mb-4">Login</h2>
+    <h2 class="is-size-2 has-text-weight-bold mb-6">Login</h2>
     <Form
       v-slot="{ errors, isSubmitting, values: { username, password } }"
       :validation-schema="validationSchema"
@@ -8,7 +8,7 @@
         username: 'p.calanna@gmail.com',
         password: '',
       }"
-      @submit="onSubmit"
+      @submit="onSubmitForm"
     >
       <div class="field">
         <label class="label">Email</label>
@@ -40,17 +40,15 @@
           </div>
         </div>
       </div>
-      <div class="field mt-5">
-        <div class="control">
-          <base-loading-button
-            v-model="isLoading"
-            :type="'submit'"
-            :button-css="'is-medium is-info'"
-            :disabled="isSubmitting || !(username && password)"
-          >
-            Effettua login
-          </base-loading-button>
-        </div>
+      <div class="control mt-5">
+        <base-loading-button
+          v-model="isLoading"
+          :type="'submit'"
+          :button-css="'is-medium is-info'"
+          :disabled="isSubmitting || !(username && password)"
+        >
+          Effettua login
+        </base-loading-button>
       </div>
       <div v-if="errors.apiError" class="has-text-danger mt-3 mb-0">
         {{ errors.apiError }}
@@ -81,7 +79,7 @@ const validationSchema = object().shape({
 
 const isLoading = ref(false);
 
-const onSubmit = async ({ username, password }, { setErrors }) => {
+const onSubmitForm = async ({ username, password }, { setErrors }) => {
   try {
     const { login } = useAuthStore();
     const successfulLogin = await login(username, password);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="is-size-2 has-text-weight-bold mb-4">Home</h2>
+    <h2 class="is-size-2 has-text-weight-bold mb-6">Lemmario.com</h2>
     <div class="is-flex is-justify-content-space-between mb-3">
       <lemmi-sorter />
       <lemmi-paginator />
