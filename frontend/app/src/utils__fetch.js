@@ -16,7 +16,7 @@ const request =
         typeOfPayload == "formUrlEncoded"
           ? new URLSearchParams(payload)
           : JSON.stringify(payload);
-    } 
+    }
     if (["GET", "DELETE"].indexOf(method) > -1) {
       if (data) {
         const queryParams = new URLSearchParams(data.payload);
