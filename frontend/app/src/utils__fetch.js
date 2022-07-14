@@ -3,7 +3,9 @@ import { useAuthStore } from "./store__auth";
 const request =
   (method) =>
   async (url, data = null) => {
+    // add authorization
     const requestOptions = { method, headers: authHeader(url) };
+    // manage methods
     if (["POST", "PUT"].indexOf(method) > -1) {
       const { payload, typeOfPayload } = data;
       requestOptions.headers["Content-Type"] =
@@ -13,8 +15,9 @@ const request =
       requestOptions.body =
         typeOfPayload == "formUrlEncoded"
           ? new URLSearchParams(payload)
-          : payload;
-    } else {
+          : JSON.stringify(payload);
+    } 
+    if (["GET", "DELETE"].indexOf(method) > -1) {
       if (data) {
         const queryParams = new URLSearchParams(data.payload);
         url = `${url}?${queryParams}`;
