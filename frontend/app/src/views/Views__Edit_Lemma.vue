@@ -66,12 +66,14 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { configure, Form, Field } from "vee-validate";
 import { object, string } from "yup";
 
 import { useLemmiStore } from "../store__lemmi";
 import { fetchWrapper } from "../utils__fetch";
 import { editUrl, deleteUrl } from "../utils__urls";
+import { router } from "../router__main";
 
 const lemmiStore = useLemmiStore();
 
@@ -89,6 +91,8 @@ const validationSchema = object().shape({
   definition: string().required("definizione richiesta"),
 });
 
+const route = useRoute();
+
 let selectedLemma = lemmiStore.currentSelectedLemma;
 
 const isLoading = ref(false);
@@ -96,6 +100,7 @@ const isLoading = ref(false);
 const onSubmitForm = async (payload, { setErrors }) => {
   try {
     await put(`${editUrl}/${selectedLemma.rowid}`, { payload });
+    router.push({ name: "route-home", params: { position: route.params.position }});
   } catch (error) {
     setErrors({ apiError: error });
   } finally {

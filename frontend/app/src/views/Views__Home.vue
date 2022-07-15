@@ -17,12 +17,14 @@
 
 <script setup>
 import { computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useLemmiStore } from "../store__lemmi";
 import LemmaCard from "./Views__Home_Lemma.vue";
 import HomeNavigator from "./Views__Home_Navigator.vue";
 
 const router = useRouter();
+
+const route = useRoute();
 
 const lemmiStore = useLemmiStore();
 
@@ -31,12 +33,14 @@ const lemmi = computed(() => lemmiStore.currentPage.data.slice(0, -1));
 const onSelectLemma = ({ lemmaId, isExpanded, isOverFlown }) => {
   lemmiStore.currentSelectedLemmaId = lemmaId;
   if ([isExpanded, !isExpanded && !isOverFlown].some(Boolean))
-    router.push({ name: "route-edit-lemma" });
+    router.push({ name: "route-edit-lemma", params: { position: window.pageYOffset }});
 };
 
 onMounted(async () => {
   try {
     await lemmiStore.fetchLemmi();
+    if (route.params.position)
+      window.scrollTo(0, route.params.position);
   } catch (error) {
     console.log(error);
   }
