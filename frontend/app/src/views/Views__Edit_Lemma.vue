@@ -38,22 +38,28 @@
         </div>
       </div>
       <div class="control mt-5">
-        <div class="buttons">
+        <div class="buttons are-medium ">
+          <router-link 
+            class="button is-primary"
+            :to="{ name: 'route-home', query: { scroll: route.query.scroll }}"
+          >
+            &larr;
+          </router-link>
           <base-loading-button
             v-model="isLoading"
             :type="'submit'"
-            :button-css="'is-medium is-info'"
+            :button-css="'is-info'"
             :disabled="isSubmitting || !(lemma && definition)"
           >
-            Modifica lemma
+            Modifica
           </base-loading-button>
           <base-loading-button
             v-model="isLoading"
-            :button-css="'is-medium is-danger'"
+            :button-css="'is-danger'"
             :disabled="isSubmitting || !(lemma && definition)"
             @click="onDeleteLemma"
           >
-            Elimina lemma
+            Elimina
           </base-loading-button>
         </div>
       </div>
