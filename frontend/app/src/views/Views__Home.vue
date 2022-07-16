@@ -33,14 +33,15 @@ const lemmi = computed(() => lemmiStore.currentPage.data.slice(0, -1));
 const onSelectLemma = ({ lemmaId, isExpanded, isOverFlown }) => {
   lemmiStore.currentSelectedLemmaId = lemmaId;
   if ([isExpanded, !isExpanded && !isOverFlown].some(Boolean))
-    router.push({ name: "route-edit-lemma", params: { position: window.pageYOffset }});
+    router.push({ name: "route-edit-lemma", query: { scroll: window.pageYOffset }});
 };
 
 onMounted(async () => {
   try {
-    await lemmiStore.fetchLemmi();
-    if (route.params.position)
-      window.scrollTo(0, route.params.position);
+    const getCache = "scroll" in route.query;
+    await lemmiStore.fetchLemmi(getCache);
+    if (route.query.scroll)
+      window.scrollTo(0, route.query.scroll);
   } catch (error) {
     console.log(error);
   }

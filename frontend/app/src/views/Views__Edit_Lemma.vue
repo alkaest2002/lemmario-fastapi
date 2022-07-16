@@ -99,8 +99,9 @@ const isLoading = ref(false);
 
 const onSubmitForm = async (payload, { setErrors }) => {
   try {
-    await put(`${editUrl}/${selectedLemma.rowid}`, { payload });
-    router.push({ name: "route-home", params: { position: route.params.position }});
+    const edited_lemma = await put(`${editUrl}/${selectedLemma.rowid}`, { payload });
+    lemmiStore.updateLemma(edited_lemma); 
+    router.push({ name: "route-home", query: { scroll: route.query.scroll }});
   } catch (error) {
     setErrors({ apiError: error });
   } finally {

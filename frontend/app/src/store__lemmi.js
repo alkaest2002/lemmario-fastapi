@@ -31,10 +31,16 @@ export const useLemmiStore = defineStore({
         (elm) => elm.rowid == state.currentSelectedLemmaId
       );
     },
+    currentSelectedLemmaIndex: (state) => {
+      if (!state.currentSelectedLemmaId) return null;
+      return state.currentPage.data.findIndex(
+        (elm) => elm.rowid == state.currentSelectedLemmaId
+      );
+    },
   },
 
   actions: {
-    async fetchLemmi() {
+    async fetchLemmi(getCache = false) {
       const payload = Object.keys(this.currentPage.metadata).reduce(
         (acc, itr) => {
           if (this.currentPage.metadata[itr])
@@ -44,20 +50,23 @@ export const useLemmiStore = defineStore({
         {}
       );
       try {
-        const page = await get(`${lemmiUrl}/list`, { payload });
-        this.currentPage = page;
+        if (!getCache) {
+          const page = await get(`${lemmiUrl}/list`, { payload });
+          this.currentPage = page;
+        }
         return Promise.resolve(true);
       } catch (error) {
         return Promise.reject(error);
       }
     },
 
-    currentExpandendItem(itemId) {
-      this.currentSelectedLemmaId = itemId;
-    },
-
     updateCurrentPageNumber(pageDirection) {
       this.currentPageNumber += pageDirection === "NEXT" ? +1 : -1;
     },
+
+    updateLemma(lemma) {
+      this.currentPage.data[this.currentSelectedLemmaIndex] = lemma;
+    }
+
   },
 });

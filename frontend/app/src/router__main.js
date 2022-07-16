@@ -11,9 +11,9 @@ export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   linkActiveClass: "active",
   routes: [
-    { name: "route-home", path: "/:position?", component: HomeView },
+    { name: "route-home", path: "/", component: HomeView },
     { name: "route-login", path: "/login", component: LoginView },
-    { name: "route-edit-lemma", path: "/edit/:position", component: EditLemmaView },
+    { name: "route-edit-lemma", path: "/edit/", component: EditLemmaView },
     { name: "route-search-lemma", path: "/search", component: SearchLemmaView },
     { name: "route-scrape-lemma", path: "/scrape", component: ScrapeLemmaView },
   ],
