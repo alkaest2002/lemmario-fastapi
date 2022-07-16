@@ -38,10 +38,10 @@
         </div>
       </div>
       <div class="control mt-5">
-        <div class="buttons are-medium ">
-          <router-link 
+        <div class="buttons are-medium">
+          <router-link
             class="button is-primary"
-            :to="{ name: 'route-home', query: { scroll: route.query.scroll }}"
+            :to="{ name: 'route-home', query: { scroll: route.query.scroll } }"
           >
             &larr;
           </router-link>
@@ -105,9 +105,11 @@ const isLoading = ref(false);
 
 const onSubmitForm = async (payload, { setErrors }) => {
   try {
-    const edited_lemma = await put(`${editUrl}/${selectedLemma.rowid}`, { payload });
-    lemmiStore.updateLemma(edited_lemma); 
-    router.push({ name: "route-home", query: { scroll: route.query.scroll }});
+    const edited_lemma = await put(`${editUrl}/${selectedLemma.rowid}`, {
+      payload,
+    });
+    lemmiStore.updateLemma(edited_lemma);
+    router.push({ name: "route-home", query: { scroll: route.query.scroll } });
   } catch (error) {
     setErrors({ apiError: error });
   } finally {

@@ -66,7 +66,6 @@ export const useLemmiStore = defineStore({
 
     updateLemma(lemma) {
       this.currentPage.data[this.currentSelectedLemmaIndex] = lemma;
-    }
-
+    },
   },
 });
