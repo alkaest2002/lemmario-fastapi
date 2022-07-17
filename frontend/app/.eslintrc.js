@@ -8,5 +8,6 @@ module.exports = {
     "vue/max-attributes-per-line": "off",
     "vue/singleline-html-element-content-newline": "off",
     "vue/html-indent": "off",
+    "vue/no-v-html": "off",
   },
 };
