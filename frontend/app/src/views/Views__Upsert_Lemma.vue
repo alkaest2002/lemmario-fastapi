@@ -41,7 +41,7 @@
         <div class="buttons are-medium">
           <router-link
             class="button is-primary"
-            :to="{ name: 'route-home', query: { scroll: route.query.scroll } }"
+            :to="{ name: 'route-list-lemmi', query: { scroll: route.query.scroll } }"
           >
             &larr;
           </router-link>
@@ -109,7 +109,7 @@ const onSubmitForm = async (payload, { setErrors }) => {
       payload,
     });
     lemmiStore.updateLemma(edited_lemma);
-    router.push({ name: "route-home", query: { scroll: route.query.scroll } });
+    router.push({ name: "route-list-lemmi", query: { scroll: route.query.scroll } });
   } catch (error) {
     setErrors({ apiError: error });
   } finally {

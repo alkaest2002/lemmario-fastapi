@@ -16,8 +16,9 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useLemmiStore } from "../store__lemmi";
-import LemmaCard from "./Views__Home_Lemma_Card.vue";
-import HomeNavigator from "./Views__Home_Navigator.vue";
+
+import LemmaCard from "./Component__Home_Lemma_Card.vue";
+import HomeNavigator from "./Component__Home_Navigator.vue";
 
 const props = defineProps({
   getCache: {

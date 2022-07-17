@@ -10,7 +10,7 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import LemmiList from "./Views__Home_Lemmi_List.vue";
+import LemmiList from "./Component__Home_List_Lemmi.vue";
 
 const route = useRoute();
 

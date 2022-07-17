@@ -14,6 +14,6 @@
 </template>
 
 <script setup>
-import LemmiPaginator from "./Views__Home_Paginator.vue";
-import LemmiSorter from "./Views__Home__Sorter.vue";
+import LemmiPaginator from "./Component__Home_Paginator.vue";
+import LemmiSorter from "./Component__Home_Sorter.vue";
 </script>

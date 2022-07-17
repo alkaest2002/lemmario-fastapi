@@ -83,7 +83,7 @@ const onSubmitForm = async ({ username, password }, { setErrors }) => {
   try {
     const { login } = useAuthStore();
     const successfulLogin = await login(username, password);
-    router.push({ name: successfulLogin ? "route-home" : "route-login" });
+    router.push({ name: successfulLogin ? "route-list-lemmi" : "route-login" });
   } catch (error) {
     setErrors({ apiError: error });
   } finally {
