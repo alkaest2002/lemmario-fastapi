@@ -1,7 +1,7 @@
 <template>
   <div class="is-flex is-justify-content-space-between">
     <lemmi-sorter />
-    <div class="buttons are-medium">
+    <div class="buttons are-medium ml-3">
       <lemmi-paginator />
       <router-link
         class="button is-warning"

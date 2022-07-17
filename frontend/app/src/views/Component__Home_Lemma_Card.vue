@@ -51,7 +51,8 @@ const defintionParagraph = ref(null);
 
 const isOverFlown = ref(false);
 
-const markAsOverflownIfNecessary = ({ clientHeight, scrollHeight }) => {
+const markAsOverflownIfNecessary = () => {
+  const { clientHeight, scrollHeight } = defintionParagraph.value;
   isOverFlown.value = scrollHeight > clientHeight;
 };
 
@@ -59,9 +60,7 @@ const isSelected = computed(() => props.selectedLemmaId == props.lemma.rowid);
 
 onMounted(() => {
   markAsOverflownIfNecessary(defintionParagraph.value);
-  window.addEventListener("resize", () => {
-    markAsOverflownIfNecessary(defintionParagraph.value);
-  });
+  window.addEventListener("resize", markAsOverflownIfNecessary);
 });
 
 onUnmounted(() => {

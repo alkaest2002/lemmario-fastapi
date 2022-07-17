@@ -37,7 +37,7 @@ const onSelectLemma = ({ lemmaId, isExpanded, isOverFlown }) => {
   lemmiStore.currentSelectedLemmaId = lemmaId;
   if ([isExpanded, !isExpanded && !isOverFlown].some(Boolean))
     router.push({
-      name: "route-edit-lemma",
+      name: "route-upsert-lemma",
       query: { scroll: window.pageYOffset },
     });
 };

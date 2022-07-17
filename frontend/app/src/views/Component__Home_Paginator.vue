@@ -40,6 +40,6 @@ const onClickNav = async (pageDirection) => {
 
 <style lang="scss" scoped>
 button {
-  min-width: 85px;
+  min-width: 90px;
 }
 </style>
