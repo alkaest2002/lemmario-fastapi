@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import { useAuthStore } from "./store__auth";
 import LoginView from "./views/Views__Login.vue";
-import ListLemmiView from "./views/Views__List_Lemmi.vue";
+import LemmiView from "./views/Views__Lemmi.vue";
 import EditLemmaView from "./views/Views__Upsert_Lemma.vue";
 import SearchLemmaView from "./views/Views__Search_Lemma.vue";
 import ScrapeLemmaView from "./views/Views__Scrape_Lemma.vue";
@@ -12,7 +12,7 @@ export const router = createRouter({
   linkActiveClass: "active",
   routes: [
     { name: "route-login", path: "/login", component: LoginView },
-    { name: "route-list-lemmi", path: "/", component: ListLemmiView },
+    { name: "route-list-lemmi", path: "/", component: LemmiView },
     { name: "route-upsert-lemma", path: "/edit/", component: EditLemmaView },
     { name: "route-search-lemma", path: "/search", component: SearchLemmaView },
     { name: "route-scrape-lemma", path: "/scrape", component: ScrapeLemmaView },

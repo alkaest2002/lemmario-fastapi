@@ -6,7 +6,7 @@ from dependency__db import get_db
 from core_enums import FieldEnum, PageDirEnum, OrderEnum
 
 import crud__lemmi as lemmi_crud
-from models__lemmi import LemmaModel, LemmaFullTextSerachModel
+from models__lemmi import LemmaModel, LemmaFullTextSearchModel
 from schemas__lemmi import LemmaSchema, LemmaListSchema
 
 router = APIRouter(prefix="/lemmi")
@@ -54,9 +54,9 @@ async def view_lemma(lemma_id: int, db: Session = Depends(get_db)) -> LemmaModel
 
 
 @router.get("/search/{lemma}")
-async def search_lemma(lemma: constr(min_length=3), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSerachModel]:
+async def search_lemma(lemma: constr(min_length=3), exact: bool = False, db: Session = Depends(get_db)) -> list[LemmaFullTextSearchModel]:
 	return lemmi_crud.search_lemma(lemma=lemma, exact=exact, db=db)
-	
+
 
 @router.post("/insert", status_code=status.HTTP_201_CREATED)
 async def insert_lemma(*, lemma: LemmaSchema, db: Session = Depends(get_db)) -> LemmaModel:

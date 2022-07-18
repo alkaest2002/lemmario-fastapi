@@ -14,8 +14,9 @@ class LemmaModel(Base):
 	updated = Column(Integer, nullable=False)
 
 
-class LemmaFullTextSerachModel(Base):
+class LemmaFullTextSearchModel(Base):
 	__tablename__ = "lemmi_fts"
 
 	rowid = Column(Integer, primary_key=True)
+	lemma = Column(String, unique=True, nullable=False)
 	definition = Column(String, nullable=False)

@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from models__lemmi import LemmaModel, LemmaFullTextSerachModel
+from models__lemmi import LemmaModel, LemmaFullTextSearchModel
 from schemas__lemmi import LemmaSchema
 
 from core_enums import PageDirEnum, OrderEnum
@@ -63,10 +63,17 @@ def list_lemmi(
 	return records[::-1 if page_dir == PageDirEnum.prev else 1]
 
 
-def search_lemma(lemma: str, exact: bool, db: Session) -> list[LemmaFullTextSerachModel]:
-	q = db.query(text("highlight(lemmi_fts, 1, '<b>', '</b>') as 'definition'")).filter(LemmaFullTextSerachModel.definition\
-		.match(f"{lemma}{'' if exact else '*'}")).order_by(text('rank desc')).limit(20)
-	return [LemmaFullTextSerachModel(definition=l) for l in db.execute(q).scalars().all()]
+def search_lemma(lemma: str, exact: bool, db: Session) -> list[LemmaFullTextSearchModel]:
+	lemmi_to_search = db.query(
+			text("rowid"), 
+			text("lemma"),
+			text("highlight(lemmi_fts, 1, '<b>', '</b>') as 'definition'")
+		)\
+		.filter(LemmaFullTextSearchModel.definition.match(f"{lemma}{'' if exact else '*'}"))\
+		.order_by(text('rank desc')).limit(20).all()
+	return  [LemmaFullTextSearchModel(
+		rowid=lemma[0], lemma=lemma[1], definition=lemma[2]) for lemma in lemmi_to_search
+	]
 
 
 def view_lemma(lemma_id: int, db: Session) -> LemmaModel:
