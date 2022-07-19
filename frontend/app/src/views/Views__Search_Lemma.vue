@@ -47,16 +47,18 @@
         {{ errors.apiError }}
       </div>
     </Form>
-    <div v-if="result.length > 0" class="mt-5">
+    <div v-if="lemmi.length > 0" class="mt-5">
       <div class="is-flex is-flex-direction-column is-justify-content-center">
-        <div v-for="(lemma, index) in result" :key="index" class="card my-2">
-          <div class="card-content">
-            <p v-html="lemma.definition" />
-          </div>
-        </div>
+         <lemma-card
+            v-for="(lemma, index) of lemmi"
+            :key="index"
+            :lemma="lemma"
+            :selected-lemma-id="lemmiStore.currentSelectedLemmaId"
+            @on-select-lemma="onSelectLemma"
+          />
       </div>
     </div>
-    <div v-if="result.length == 0 && resultIsReady" class="mt-5">
+    <div v-if="lemmi.length == 0 && resultIsReady" class="mt-5">
       Nessun risultato.
     </div>
   </div>
@@ -69,6 +71,9 @@ import { boolean, object, string } from "yup";
 
 import { fetchWrapper } from "../utils__fetch";
 import { searchUrl } from "../utils__urls";
+import { useLemma } from "../composables__lemma";
+
+import LemmaCard from "./Component__Lemma_Card.vue";
 
 configure({
   validateOnBlur: false,
@@ -84,17 +89,19 @@ const validationSchema = object().shape({
 
 const { get } = fetchWrapper;
 
+const { lemmiStore, onSelectLemma } = useLemma();
+
 const isLoading = ref(false);
 
 const resultIsReady = ref(false);
 
-const result = ref([]);
+const lemmi = ref([]);
 
 const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
   try {
     resultIsReady.value = false;
     const url = `${searchUrl}/${lemma}?${new URLSearchParams({isExactSearch: isExactSearch || false })}`
-    result.value = await get(url);
+    lemmi.value = await get(url);
     resultIsReady.value = true;
   } catch (error) {
     setErrors({ apiError: error });

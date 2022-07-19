@@ -3,7 +3,7 @@
     class="card my-2 is-clickable"
     @click="
       emit('on-select-lemma', {
-        lemmaId: lemma.rowid,
+        lemma,
         isExpanded: isSelected && isOverFlown,
         isOverFlown,
       })
@@ -20,9 +20,8 @@
         ref="defintionParagraph"
         class="definition"
         :class="{ 'is-expanded': isSelected && isOverFlown }"
-      >
-        {{ lemma.definition }}
-      </p>
+        v-html="lemma.definition"
+      />
     </div>
   </div>
 </template>

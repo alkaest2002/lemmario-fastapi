@@ -9,7 +9,7 @@ export const useLemmiStore = defineStore({
 
   state: () => ({
     currentPageNumber: 1,
-    currentSelectedLemmaId: null,
+    currentSelectedLemma: null,
     currentPage: {
       data: [],
       metadata: {
@@ -23,21 +23,6 @@ export const useLemmiStore = defineStore({
       },
     },
   }),
-
-  getters: {
-    currentSelectedLemma: (state) => {
-      if (!state.currentSelectedLemmaId) return null;
-      return state.currentPage.data.find(
-        (elm) => elm.rowid == state.currentSelectedLemmaId
-      );
-    },
-    currentSelectedLemmaIndex: (state) => {
-      if (!state.currentSelectedLemmaId) return null;
-      return state.currentPage.data.findIndex(
-        (elm) => elm.rowid == state.currentSelectedLemmaId
-      );
-    },
-  },
 
   actions: {
     async fetchLemmi(getCache = false) {
@@ -64,8 +49,13 @@ export const useLemmiStore = defineStore({
       this.currentPageNumber += pageDirection === "NEXT" ? +1 : -1;
     },
 
-    updateLemma(lemma) {
-      this.currentPage.data[this.currentSelectedLemmaIndex] = lemma;
+    updateLemma() {
+      if (!this.currentSelectedLemma) return null;
+      const lemmaIndex = this.currentPage.data.findIndex(
+        (elm) => elm.rowid == this.currentSelectedLemma.rowid
+      );
+      if (lemmaIndex > -1)
+       this.currentPage.data[lemmaIndex] = this.currentSelectedLemma;
     },
   },
 });
