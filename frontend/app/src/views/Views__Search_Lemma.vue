@@ -3,7 +3,7 @@
     <base-title :title="'Cerca'" />
     <p class="mb-3">La ricerca produrrà un massimo di 20 risultati.</p>
     <Form
-      v-slot="{ errors, isSubmitting, values: { lemma }}"
+      v-slot="{ errors, isSubmitting, values: { lemma } }"
       :validation-schema="validationSchema"
       @submit="onSubmitForm"
       @invalid-submit="onInvalidSubmitForm"
@@ -24,12 +24,20 @@
       </div>
       <div class="field">
         <div class="control">
-          <Field v-slot="{ field }" name="isExactSearch" type="checkbox" :value="true">
+          <Field
+            v-slot="{ field }"
+            name="isExactSearch"
+            type="checkbox"
+            :value="true"
+          >
             <label>
-              <input type="checkbox" name="isExactSearch" v-bind="field" :value="true">
-              <span class="hast-text-gray">
-                effettua ricerca esatta
-              </span>
+              <input
+                type="checkbox"
+                name="isExactSearch"
+                v-bind="field"
+                :value="true"
+              />
+              <span class="hast-text-gray"> effettua ricerca esatta </span>
             </label>
           </Field>
           <div class="has-text-danger">
@@ -93,7 +101,6 @@ const validationSchema = object().shape({
   isExactSearch: boolean(),
 });
 
-
 const { get } = fetchWrapper;
 
 const { lemmiStore, onSelectLemma } = useLemma();
@@ -107,7 +114,9 @@ const lemmi = ref([]);
 const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
   try {
     resultIsReady.value = false;
-    const url = `${searchUrl}/${lemma}?${new URLSearchParams({isExactSearch: isExactSearch || false })}`
+    const url = `${searchUrl}/${lemma}?${new URLSearchParams({
+      isExactSearch: isExactSearch || false,
+    })}`;
     lemmi.value = await get(url);
     resultIsReady.value = true;
   } catch (error) {
@@ -119,6 +128,6 @@ const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
 
 const onInvalidSubmitForm = () => {
   resultIsReady.value = false;
-  isLoading.value = false ;
+  isLoading.value = false;
 };
 </script>

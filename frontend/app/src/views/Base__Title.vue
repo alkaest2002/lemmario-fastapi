@@ -1,8 +1,8 @@
 <template>
   <div class="mb-6">
-    <router-link 
+    <router-link
       class="is-size-2 has-text-weight-bold has-text-black"
-      :to="{ name: goTo}"
+      :to="{ name: goTo }"
     >
       {{ title }}
     </router-link>
@@ -10,18 +10,16 @@
 </template>
 
 <script setup>
-
 /* eslint-disable no-unused-vars */
- const props = defineProps({
+const props = defineProps({
   title: {
     type: String,
-    required: true
+    required: true,
   },
 
   goTo: {
     type: String,
-    default: "route-list-lemmi"
-  }
-
- });
+    default: "route-list-lemmi",
+  },
+});
 </script>

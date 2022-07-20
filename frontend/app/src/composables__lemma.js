@@ -1,9 +1,8 @@
-
 import { useRouter } from "vue-router";
 import { useLemmiStore } from "./store__lemmi";
 
-export const useLemma =  () => {
-/* eslint-disable no-unused-vars */
+export const useLemma = () => {
+  /* eslint-disable no-unused-vars */
 
   const router = useRouter();
 
@@ -22,5 +21,5 @@ export const useLemma =  () => {
     router,
     lemmiStore,
     onSelectLemma,
-  }
+  };
 };

@@ -55,7 +55,9 @@ const markAsOverflownIfNecessary = () => {
   isOverFlown.value = scrollHeight > clientHeight;
 };
 
-const isSelected = computed(() => props.selectedLemma?.rowid == props.lemma.rowid);
+const isSelected = computed(
+  () => props.selectedLemma?.rowid == props.lemma.rowid
+);
 
 onMounted(() => {
   markAsOverflownIfNecessary(defintionParagraph.value);

@@ -1,6 +1,9 @@
 <template>
   <div class="is-flex is-justify-content-space-between">
-    <lemmi-sorter />
+    <div>
+      <lemmi-filter class="mr-2" />
+      <lemmi-sorter />
+    </div>
     <div class="buttons are-medium ml-3">
       <lemmi-paginator />
       <router-link
@@ -15,5 +18,6 @@
 
 <script setup>
 import LemmiPaginator from "./Component__Lemmi_Paginator.vue";
+import LemmiFilter from "./Component__Lemmi_filter.vue";
 import LemmiSorter from "./Component__Lemmi_Sorter.vue";
 </script>
