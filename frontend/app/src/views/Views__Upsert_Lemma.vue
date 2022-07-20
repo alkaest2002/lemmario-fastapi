@@ -39,15 +39,12 @@
       </div>
       <div class="control mt-5">
         <div class="buttons are-medium">
-          <router-link
+          <button
             class="button is-primary"
-            :to="{
-              name: 'route-list-lemmi',
-              query: { scroll: route.query.scroll },
-            }"
+            @click="$router.go(-1)"
           >
-            &larr;
-          </router-link>
+             &larr;
+          </button>
           <base-loading-button
             v-model="isLoading"
             :type="'submit'"
