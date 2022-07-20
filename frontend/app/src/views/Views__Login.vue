@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { configure, Form, Field } from "vee-validate";
 import { object, string } from "yup";
 
@@ -90,4 +90,9 @@ const onSubmitForm = async ({ username, password }, { setErrors }) => {
     isLoading.value = false;
   }
 };
+
+onMounted(() => {
+  const lemmaInput = document.getElementsByTagName("input")[0];
+  lemmaInput.focus();
+});
 </script>
