@@ -49,13 +49,13 @@ export const useLemmiStore = defineStore({
       this.currentPageNumber += pageDirection === "NEXT" ? +1 : -1;
     },
 
-    updateLemma() {
+    updateLemma(lemma) {
       if (!this.currentSelectedLemma) return null;
       const lemmaIndex = this.currentPage.data.findIndex(
         (elm) => elm.rowid == this.currentSelectedLemma.rowid
       );
       if (lemmaIndex > -1)
-        this.currentPage.data[lemmaIndex] = this.currentSelectedLemma;
+       this.currentPage.data[lemmaIndex] = lemma;
     },
   },
 });
