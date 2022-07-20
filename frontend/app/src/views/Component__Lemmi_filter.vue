@@ -3,7 +3,7 @@
     <select v-model="filtering">
       <option :value="'letter tutto'">Tutto</option>
       <option v-for="letter in letters" :key="letter" :value="`letter ${letter}`">
-        {{ letter.toUpperCase() }}
+        {{ letter }}
       </option>
     </select>
   </div>
@@ -13,7 +13,7 @@
 import { computed } from "vue";
 import { useLemmiStore } from "../store__lemmi";
 
-const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 const lemmiStore = useLemmiStore();
 

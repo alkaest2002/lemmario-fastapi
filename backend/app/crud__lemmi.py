@@ -54,7 +54,6 @@ def list_lemmi(
 	if (filter_by and filter_value):
 		# define filter_by_field to operate on
 		filter_by_field = getattr(LemmaModel, filter_by)
-		print(filter_by_field, filter_value)
 		# add filter by to query
 		q = q.filter(filter_by_field.startswith(filter_value))
 	# retrieve records
