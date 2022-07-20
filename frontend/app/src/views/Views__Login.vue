@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="is-size-2 has-text-weight-bold mb-6">Login</h2>
+    <base-title :title="'Login'" />
     <Form
       v-slot="{ errors, isSubmitting, values: { username, password } }"
       :validation-schema="validationSchema"

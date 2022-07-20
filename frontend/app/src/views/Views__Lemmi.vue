@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="is-size-2 has-text-weight-bold mb-6">Lemmario.com</h2>
+    <base-title :title="'Lemmario.com'" />
     <Suspense>
       <template #fallback>Attendere... </template>
       <lemmi-list :get-cache="'scroll' in route.query" />

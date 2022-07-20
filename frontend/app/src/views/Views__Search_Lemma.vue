@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h2 class="is-size-2 has-text-weight-bold mb-6">Cerca</h2>
+    <base-title :title="'Cerca'" />
+    <p class="mb-3">La ricerca produrrà un massimo di 20 risultati.</p>
     <Form
-      v-slot="{ errors, isSubmitting, values: { lemma } }"
+      v-slot="{ errors, isSubmitting, values: { lemma }}"
       :validation-schema="validationSchema"
       @submit="onSubmitForm"
+      @invalid-submit="onInvalidSubmitForm"
     >
       <div class="field">
         <div class="control">
@@ -12,7 +14,7 @@
             name="lemma"
             type="text"
             class="input is-medium"
-            placeholder="lemma da cercare"
+            placeholder="inserisci almeno tre lettere"
             :class="{ 'is-danger': errors.lemma }"
           />
           <div class="has-text-danger">
@@ -25,7 +27,9 @@
           <Field v-slot="{ field }" name="isExactSearch" type="checkbox" :value="true">
             <label>
               <input type="checkbox" name="isExactSearch" v-bind="field" :value="true">
-              Ricerca esatta
+              <span class="hast-text-gray">
+                effettua ricerca esatta
+              </span>
             </label>
           </Field>
           <div class="has-text-danger">
@@ -49,13 +53,13 @@
     </Form>
     <div v-if="lemmi.length > 0" class="mt-5">
       <div class="is-flex is-flex-direction-column is-justify-content-center">
-         <lemma-card
-            v-for="(lemma, index) of lemmi"
-            :key="index"
-            :lemma="lemma"
-            :selected-lemma-id="lemmiStore.currentSelectedLemmaId"
-            @on-select-lemma="onSelectLemma"
-          />
+        <lemma-card
+          v-for="(lemma, index) of lemmi"
+          :key="index"
+          :lemma="lemma"
+          :selected-lemma="lemmiStore.currentSelectedLemma"
+          @on-select-lemma="onSelectLemma"
+        />
       </div>
     </div>
     <div v-if="lemmi.length == 0 && resultIsReady" class="mt-5">
@@ -83,9 +87,12 @@ configure({
 });
 
 const validationSchema = object().shape({
-  lemma: string().required("lemma richiesto"),
+  lemma: string()
+    .required("lemma richiesto")
+    .min(3, "specifica almeno tre caratteri"),
   isExactSearch: boolean(),
 });
+
 
 const { get } = fetchWrapper;
 
@@ -108,5 +115,10 @@ const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const onInvalidSubmitForm = () => {
+  resultIsReady.value = false;
+  isLoading.value = false ;
 };
 </script>

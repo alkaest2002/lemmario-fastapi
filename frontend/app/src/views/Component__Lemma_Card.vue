@@ -40,8 +40,8 @@ const props = defineProps({
     required: true,
   },
 
-  selectedLemmaId: {
-    type: [Number, null],
+  selectedLemma: {
+    type: Object,
     default: null,
   },
 });
@@ -55,7 +55,7 @@ const markAsOverflownIfNecessary = () => {
   isOverFlown.value = scrollHeight > clientHeight;
 };
 
-const isSelected = computed(() => props.selectedLemmaId == props.lemma.rowid);
+const isSelected = computed(() => props.selectedLemma?.rowid == props.lemma.rowid);
 
 onMounted(() => {
   markAsOverflownIfNecessary(defintionParagraph.value);

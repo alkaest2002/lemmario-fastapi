@@ -5,7 +5,7 @@
       v-for="(lemma, index) of lemmi"
       :key="index"
       :lemma="lemma"
-      :selected-lemma-id="lemmiStore.currentSelectedLemmaId"
+      :selected-lemma="lemmiStore.currentSelectedLemma"
       @on-select-lemma="onSelectLemma"
     />
   </div>
