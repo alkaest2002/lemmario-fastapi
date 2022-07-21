@@ -1,5 +1,5 @@
 <template>
   <div>
-    <base-title :title="'Treccani'" />
+    <base-title>Treccani</base-title>
   </div>
 </template>

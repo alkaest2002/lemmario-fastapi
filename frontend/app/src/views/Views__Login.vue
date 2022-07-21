@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-title :title="'Login'" />
+    <base-title>Login</base-title>
     <Form
       v-slot="{ errors, isSubmitting, values: { username, password } }"
       :validation-schema="validationSchema"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-title :title="'Lemmario.com'" />
+    <base-title>Lemmario.com</base-title>
     <Suspense>
       <template #fallback>Attendere... </template>
       <lemmi-list :get-cache="'scroll' in route.query" />

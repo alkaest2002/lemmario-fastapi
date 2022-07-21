@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-title :title="'Cerca'" />
+    <base-title>Cerca</base-title>
     <p class="mb-3">La ricerca produrrà un massimo di 20 risultati.</p>
     <Form
       v-slot="{ errors, isSubmitting, values: { lemma } }"

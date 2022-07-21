@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="is-size-2 has-text-weight-bold mb-6">Modifica</h2>
+   <base-title>Modifica</base-title>
     <Form
       v-slot="{ errors, isSubmitting, values: { lemma, definition } }"
       :validation-schema="validationSchema"
