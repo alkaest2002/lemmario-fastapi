@@ -114,7 +114,7 @@ const onSubmitForm = async (payload, { setErrors }) => {
     const lemmaToUpsert = await restOp(upsertUrl, { payload });
     lemmiStore.updateLemma(lemmaToUpsert);
     router.push({
-      name: "route-list-lemmi",
+      name: "route-list",
       query: { scroll: route.query.scroll },
     });
   } catch (error) {

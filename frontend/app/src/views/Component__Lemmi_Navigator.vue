@@ -8,7 +8,7 @@
       <lemmi-paginator />
       <router-link
         class="button is-warning"
-        :to="{ name: 'route-search-lemma' }"
+        :to="{ name: 'route-search' }"
       >
         Cerca
       </router-link>

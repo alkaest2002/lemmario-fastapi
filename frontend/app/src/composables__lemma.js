@@ -18,7 +18,7 @@ export const useLemma = () => {
     lemmiStore.currentSelectedLemma = lemma;
     if ([isExpanded, !isExpanded && !isOverFlown].some(Boolean))
       router.push({
-        name: "route-upsert-lemma",
+        name: "route-upsert",
         query: { scroll: window.pageYOffset },
       });
   };

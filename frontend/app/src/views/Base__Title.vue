@@ -14,7 +14,7 @@
 const props = defineProps({
   goTo: {
     type: String,
-    default: "route-list-lemmi",
+    default: "route-list",
   },
 });
 </script>
