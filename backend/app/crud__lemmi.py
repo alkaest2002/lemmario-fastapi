@@ -45,9 +45,9 @@ def list_lemmi(
 		if page_dir == PageDirEnum.next and order_value == OrderEnum.asc:
 			q = q.where(order_by_field >= offset)
 		if page_dir == PageDirEnum.prev and order_value == OrderEnum.desc:
-			q = q.where(order_by_field >= offset)
+			q = q.where(order_by_field > offset)
 		if page_dir == PageDirEnum.next and order_value == OrderEnum.desc:
-			q = q.where(order_by_field <= offset)
+			q = q.where(order_by_field < offset)
 		if page_dir == PageDirEnum.prev and order_value == OrderEnum.asc:
 			q = q.where(order_by_field <= offset)
 	# if filter is set
@@ -82,7 +82,7 @@ def view_lemma(lemma_id: int, db: Session) -> LemmaModel:
 
 def insert_lemma(lemma: LemmaSchema, db: Session) -> LemmaModel:
 	lemma_to_insert = LemmaModel(**lemma.dict())
-	timestamp = datetime.timestamp(datetime.now())
+	timestamp = int(datetime.timestamp(datetime.now()))
 	lemma_to_insert.letter = lemma.lemma[0].upper()
 	lemma_to_insert.created = timestamp
 	lemma_to_insert.updated = timestamp
@@ -97,7 +97,7 @@ def update_lemma(lemma_id: int, lemma: LemmaSchema, db: Session)-> LemmaModel:
 	for key, value in lemma.__dict__.items():
 		setattr(lemma_to_update, key, value) 
 	LemmaModel.letter = lemma.lemma[0].upper()
-	lemma_to_update.updated = datetime.timestamp(datetime.now())
+	lemma_to_update.updated = int(datetime.timestamp(datetime.now()))
 	db.commit()
 	db.refresh(lemma_to_update)
 	return lemma_to_update
