@@ -34,7 +34,10 @@ const props = defineProps({
 const { lemmiStore, onSelectLemma } = useLemma();
 
 const lemmi = computed(() => {
-  if (lemmiStore.currentPage.data.length > lemmiStore.currentPage.metadata.page_size) 
+  if (
+    lemmiStore.currentPage.data.length >
+    lemmiStore.currentPage.metadata.page_size
+  )
     return lemmiStore.currentPage.data.slice(0, -1);
   return lemmiStore.currentPage.data;
 });

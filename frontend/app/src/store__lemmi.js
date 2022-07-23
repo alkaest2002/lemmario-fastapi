@@ -54,8 +54,7 @@ export const useLemmiStore = defineStore({
       const lemmaIndex = this.currentPage.data.findIndex(
         (elm) => elm.rowid == this.currentSelectedLemma.rowid
       );
-      if (lemmaIndex > -1)
-       this.currentPage.data[lemmaIndex] = lemma;
+      if (lemmaIndex > -1) this.currentPage.data[lemmaIndex] = lemma;
     },
   },
 });

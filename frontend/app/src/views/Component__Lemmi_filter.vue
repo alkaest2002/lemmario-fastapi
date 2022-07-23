@@ -30,8 +30,10 @@ const filtering = computed({
       lemmiStore.currentPageNumber = 1;
       lemmiStore.currentPage.metadata.offset = null;
       lemmiStore.currentPage.metadata.page_dir = "NEXT";
-      lemmiStore.currentPage.metadata.filter_by = filter_value == "tutto" ? null : filter_by;
-      lemmiStore.currentPage.metadata.filter_value = filter_value == "tutto" ? null : filter_value;
+      lemmiStore.currentPage.metadata.filter_by =
+        filter_value == "tutto" ? null : filter_by;
+      lemmiStore.currentPage.metadata.filter_value =
+        filter_value == "tutto" ? null : filter_value;
       await lemmiStore.fetchLemmi();
     }
   },

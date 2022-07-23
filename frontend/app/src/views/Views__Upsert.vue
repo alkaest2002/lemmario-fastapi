@@ -1,6 +1,6 @@
 <template>
   <div>
-   <base-title>Modifica</base-title>
+    <base-title>Modifica</base-title>
     <Form
       v-slot="{ errors, isSubmitting, values: { lemma, definition } }"
       :validation-schema="validationSchema"
@@ -39,11 +39,8 @@
       </div>
       <div class="control mt-5">
         <div class="buttons are-medium">
-          <button
-            class="button is-primary"
-            @click="$router.go(-1)"
-          >
-             &larr;
+          <button class="button is-primary" @click="$router.go(-1)">
+            &larr;
           </button>
           <base-loading-button
             v-model="isLoading"
@@ -51,7 +48,7 @@
             :button-css="'is-info'"
             :disabled="isSubmitting || !(lemma && definition)"
           >
-            {{ selectedLemma.rowid ? 'Modifica' : 'Inserisci' }}
+            {{ selectedLemma.rowid ? "Modifica" : "Inserisci" }}
           </base-loading-button>
           <base-loading-button
             v-model="isLoading"
@@ -107,10 +104,8 @@ const onSubmitForm = async (payload, { setErrors }) => {
   try {
     const upsertUrl = selectedLemma.rowid
       ? `${editUrl}/${selectedLemma.rowid}`
-      : insertUrl
-    const restOp = selectedLemma.rowid
-      ? put
-      : post
+      : insertUrl;
+    const restOp = selectedLemma.rowid ? put : post;
     const lemmaToUpsert = await restOp(upsertUrl, { payload });
     lemmiStore.updateLemma(lemmaToUpsert);
     router.push({

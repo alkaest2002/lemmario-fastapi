@@ -24,15 +24,16 @@ import { useLemma } from "../composables__lemma";
 const props = defineProps({
   lemmi: {
     type: Array,
-    default: () => {[]}
+    default: () => {
+      [];
+    },
   },
 
   resultIsReady: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const { lemmiStore, onSelectLemma } = useLemma();
-
 </script>

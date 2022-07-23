@@ -6,10 +6,7 @@
     </div>
     <div class="buttons are-medium ml-3">
       <lemmi-paginator />
-      <router-link
-        class="button is-warning"
-        :to="{ name: 'route-search' }"
-      >
+      <router-link class="button is-warning" :to="{ name: 'route-search' }">
         Cerca
       </router-link>
     </div>

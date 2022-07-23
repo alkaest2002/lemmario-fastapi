@@ -71,7 +71,7 @@
     </Form>
     <Suspense>
       <template #fallback>Attendere... </template>
-       <search-lemmi :lemmi="lemmi" :result-is-ready="resultIsReady" />
+      <search-lemmi :lemmi="lemmi" :result-is-ready="resultIsReady" />
     </Suspense>
   </div>
 </template>
@@ -113,10 +113,9 @@ const resultIsReady = ref(false);
 const lemmi = ref([]);
 
 const computedUrl = computed(() => {
-  console.log(searchType.value)
-  if (searchType.value == "SearchTreccani")
-    return searchUrlTreccani;
-  return searchUrl
+  console.log(searchType.value);
+  if (searchType.value == "SearchTreccani") return searchUrlTreccani;
+  return searchUrl;
 });
 
 const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
