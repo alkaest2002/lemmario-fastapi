@@ -5,3 +5,4 @@ export const lemmiUrl = `${baseUrl}/lemmi`;
 export const editUrl = `${baseUrl}/lemmi/update`;
 export const deleteUrl = `${baseUrl}/lemmi/delete`;
 export const searchUrl = `${baseUrl}/lemmi/search`;
+export const searchUrlTreccani = `${baseUrl}/treccani/search`;

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from scrape_lemmi import TreccaniScaprer
 
 
-router = APIRouter(prefix="/scrape",)
+router = APIRouter(prefix="/treccani",)
 
 
 

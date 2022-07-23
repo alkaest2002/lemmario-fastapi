@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="control">
+      <div class="buttons">
         <base-loading-button
           v-model="isLoading"
           :type="'submit'"
@@ -54,6 +54,15 @@
           @click="resultComponent = 'SearchLemmi'"
         >
           Cerca
+        </base-loading-button>
+        <base-loading-button
+          v-model="isLoading"
+          :type="'submit'"
+          :button-css="'is-medium is-warning'"
+          :disabled="isSubmitting || !lemma"
+          @click="resultComponent = 'SearchTreccani'"
+        >
+          Treccani
         </base-loading-button>
       </div>
       <div v-if="errors.apiError" class="has-text-danger mt-3 mb-0">
@@ -70,14 +79,15 @@
 <script setup>
 /* eslint-disable no-unused-vars */
 
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { configure, Form, Field } from "vee-validate";
 import { boolean, object, string } from "yup";
 
 import { fetchWrapper } from "../utils__fetch";
-import { searchUrl } from "../utils__urls";
+import { searchUrl, searchUrlTreccani } from "../utils__urls";
 
 import SearchLemmi from "./Components__Search_Lemmi.vue";
+import SearchTreccani from "./Components__Search_Treccani.vue";
 
 configure({
   validateOnBlur: false,
@@ -99,18 +109,27 @@ const isLoading = ref(false);
 
 const components = {
   SearchLemmi,
+  SearchTreccani,
 }
 
-const resultComponent = "SearchLemmi";
+const resultComponent = ref("SearchLemmi");
 
 const resultIsReady = ref(false);
 
 const lemmi = ref([]);
 
+const computedUrl = computed(() => {
+  console.log(resultComponent.value)
+  if (resultComponent.value == "SearchTreccani")
+    return searchUrlTreccani;
+  return searchUrl
+});
+
 const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
+  console.log(computedUrl.value)
   try {
     resultIsReady.value = false;
-    const url = `${searchUrl}/${lemma}?${new URLSearchParams({
+    const url = `${computedUrl.value}/${lemma}?${new URLSearchParams({
       isExactSearch: isExactSearch || false,
     })}`;
     lemmi.value = await get(url);
