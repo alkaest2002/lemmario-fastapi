@@ -113,7 +113,6 @@ const resultIsReady = ref(false);
 const lemmi = ref([]);
 
 const computedUrl = computed(() => {
-  console.log(searchType.value);
   if (searchType.value == "SearchTreccani") return searchUrlTreccani;
   return searchUrl;
 });

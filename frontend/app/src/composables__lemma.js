@@ -9,11 +9,6 @@ export const useLemma = () => {
   const lemmiStore = useLemmiStore();
 
   const onSelectLemma = ({ lemma, isExpanded, isOverFlown }) => {
-    Object.keys(lemma).forEach((key) => {
-      const regex = /<b>|<\/b>/gi;
-      if (typeof lemma[key] == "string")
-        lemma[key] = lemma[key].replace(regex, "");
-    });
     lemmiStore.currentSelectedLemma = lemma;
     if ([isExpanded, !isExpanded && !isOverFlown].some(Boolean))
       router.push({

@@ -4,7 +4,7 @@
     <Form
       v-slot="{ errors, isSubmitting, values: { lemma, definition } }"
       :validation-schema="validationSchema"
-      :initial-values="selectedLemma"
+      :initial-values="cleanedSelectedLemma"
       @submit="onSubmitForm"
     >
       <div class="field">
@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { configure, Form, Field } from "vee-validate";
 import { object, string } from "yup";
@@ -96,7 +96,17 @@ const validationSchema = object().shape({
 
 const route = useRoute();
 
-let selectedLemma = lemmiStore.currentSelectedLemma;
+const selectedLemma = lemmiStore.currentSelectedLemma;
+
+const cleanedSelectedLemma = computed(() => {
+  let lemma = { ...selectedLemma };
+  Object.keys(lemma).forEach((key) => {
+    const regex = /<b>|<\/b>/gi;
+    if (typeof lemma[key] == "string")
+      lemma[key] = lemma[key].replace(regex, "");
+  });
+  return lemma;
+});
 
 const isLoading = ref(false);
 
