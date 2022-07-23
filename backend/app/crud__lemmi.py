@@ -45,9 +45,9 @@ def list_lemmi(
 		if page_dir == PageDirEnum.next and order_value == OrderEnum.asc:
 			q = q.where(order_by_field >= offset)
 		if page_dir == PageDirEnum.prev and order_value == OrderEnum.desc:
-			q = q.where(order_by_field > offset)
+			q = q.where(order_by_field >= offset)
 		if page_dir == PageDirEnum.next and order_value == OrderEnum.desc:
-			q = q.where(order_by_field < offset)
+			q = q.where(order_by_field <= offset)
 		if page_dir == PageDirEnum.prev and order_value == OrderEnum.asc:
 			q = q.where(order_by_field <= offset)
 	# if filter is set
