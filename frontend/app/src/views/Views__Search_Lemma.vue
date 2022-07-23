@@ -51,6 +51,7 @@
           :type="'submit'"
           :button-css="'is-medium is-info'"
           :disabled="isSubmitting || !lemma"
+          @click="resultComponent = 'SearchLemmi'"
         >
           Cerca
         </base-loading-button>
@@ -59,33 +60,24 @@
         {{ errors.apiError }}
       </div>
     </Form>
-    <div v-if="lemmi.length > 0" class="mt-5">
-      <div class="is-flex is-flex-direction-column is-justify-content-center">
-        <lemma-card
-          v-for="(lemma, index) of lemmi"
-          :key="index"
-          :lemma="lemma"
-          :selected-lemma="lemmiStore.currentSelectedLemma"
-          @on-select-lemma="onSelectLemma"
-        />
-      </div>
-    </div>
-    <div v-if="lemmi.length == 0 && resultIsReady" class="mt-5">
-      Nessun risultato.
-    </div>
+    <Suspense>
+      <template #fallback>Attendere... </template>
+       <component :is="components[resultComponent]" :lemmi="lemmi" :result-is-ready="resultIsReady" />
+    </Suspense>
   </div>
 </template>
 
 <script setup>
+/* eslint-disable no-unused-vars */
+
 import { ref, onMounted } from "vue";
 import { configure, Form, Field } from "vee-validate";
 import { boolean, object, string } from "yup";
 
 import { fetchWrapper } from "../utils__fetch";
 import { searchUrl } from "../utils__urls";
-import { useLemma } from "../composables__lemma";
 
-import LemmaCard from "./Component__Lemma_Card.vue";
+import SearchLemmi from "./Components__Search_Lemmi.vue";
 
 configure({
   validateOnBlur: false,
@@ -103,9 +95,13 @@ const validationSchema = object().shape({
 
 const { get } = fetchWrapper;
 
-const { lemmiStore, onSelectLemma } = useLemma();
-
 const isLoading = ref(false);
+
+const components = {
+  SearchLemmi,
+}
+
+const resultComponent = "SearchLemmi";
 
 const resultIsReady = ref(false);
 
