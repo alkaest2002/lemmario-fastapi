@@ -51,7 +51,7 @@
           :type="'submit'"
           :button-css="'is-medium is-info'"
           :disabled="isSubmitting || !lemma"
-          @click="resultComponent = 'SearchLemmi'"
+          @click="searchType = 'SearchLemmi'"
         >
           Cerca
         </base-loading-button>
@@ -60,7 +60,7 @@
           :type="'submit'"
           :button-css="'is-medium is-warning'"
           :disabled="isSubmitting || !lemma"
-          @click="resultComponent = 'SearchTreccani'"
+          @click="searchType = 'SearchTreccani'"
         >
           Treccani
         </base-loading-button>
@@ -71,7 +71,7 @@
     </Form>
     <Suspense>
       <template #fallback>Attendere... </template>
-       <component :is="components[resultComponent]" :lemmi="lemmi" :result-is-ready="resultIsReady" />
+       <search-lemmi :lemmi="lemmi" :result-is-ready="resultIsReady" />
     </Suspense>
   </div>
 </template>
@@ -107,26 +107,20 @@ const { get } = fetchWrapper;
 
 const isLoading = ref(false);
 
-const components = {
-  SearchLemmi,
-  SearchTreccani,
-}
-
-const resultComponent = ref("SearchLemmi");
+const searchType = ref("SearchLemmi");
 
 const resultIsReady = ref(false);
 
 const lemmi = ref([]);
 
 const computedUrl = computed(() => {
-  console.log(resultComponent.value)
-  if (resultComponent.value == "SearchTreccani")
+  console.log(searchType.value)
+  if (searchType.value == "SearchTreccani")
     return searchUrlTreccani;
   return searchUrl
 });
 
 const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
-  console.log(computedUrl.value)
   try {
     resultIsReady.value = false;
     const url = `${computedUrl.value}/${lemma}?${new URLSearchParams({

@@ -51,7 +51,7 @@
             :button-css="'is-info'"
             :disabled="isSubmitting || !(lemma && definition)"
           >
-            Modifica
+            {{ selectedLemma.rowid ? 'Modifica' : 'Inserisci' }}
           </base-loading-button>
           <base-loading-button
             v-model="isLoading"
@@ -78,12 +78,12 @@ import { object, string } from "yup";
 
 import { useLemmiStore } from "../store__lemmi";
 import { fetchWrapper } from "../utils__fetch";
-import { editUrl, deleteUrl } from "../utils__urls";
+import { insertUrl, editUrl, deleteUrl } from "../utils__urls";
 import { router } from "../router__main";
 
 const lemmiStore = useLemmiStore();
 
-const { put, del } = fetchWrapper;
+const { post, put, del } = fetchWrapper;
 
 configure({
   validateOnBlur: false,
@@ -105,10 +105,14 @@ const isLoading = ref(false);
 
 const onSubmitForm = async (payload, { setErrors }) => {
   try {
-    const edited_lemma = await put(`${editUrl}/${selectedLemma.rowid}`, {
-      payload,
-    });
-    lemmiStore.updateLemma(edited_lemma);
+    const upsertUrl = selectedLemma.rowid
+      ? `${editUrl}/${selectedLemma.rowid}`
+      : insertUrl
+    const restOp = selectedLemma.rowid
+      ? put
+      : post
+    const lemmaToUpsert = await restOp(upsertUrl, { payload });
+    lemmiStore.updateLemma(lemmaToUpsert);
     router.push({
       name: "route-list-lemmi",
       query: { scroll: route.query.scroll },
