@@ -26,14 +26,14 @@
         <div class="control">
           <Field
             v-slot="{ field }"
-            name="isExactSearch"
+            name="exact"
             type="checkbox"
             :value="true"
           >
             <label>
               <input
                 type="checkbox"
-                name="isExactSearch"
+                name="exact"
                 v-bind="field"
                 :value="true"
               />
@@ -41,7 +41,7 @@
             </label>
           </Field>
           <div class="has-text-danger">
-            {{ errors.isExactSearch }}
+            {{ errors.exact }}
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ const validationSchema = object().shape({
   lemma: string()
     .required("lemma richiesto")
     .min(3, "specifica almeno tre caratteri"),
-  isExactSearch: boolean(),
+  exact: boolean(),
 });
 
 const { get } = fetchWrapper;
@@ -118,11 +118,11 @@ const computedUrl = computed(() => {
   return searchUrl;
 });
 
-const onSubmitForm = async ({ lemma, isExactSearch }, { setErrors }) => {
+const onSubmitForm = async ({ lemma, exact }, { setErrors }) => {
   try {
     resultIsReady.value = false;
     const url = `${computedUrl.value}/${lemma}?${new URLSearchParams({
-      isExactSearch: isExactSearch || false,
+      exact: exact || false,
     })}`;
     lemmi.value = await get(url);
     resultIsReady.value = true;
