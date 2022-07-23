@@ -18,6 +18,6 @@
 
 <script setup>
 import LemmiPaginator from "./Component__Lemmi_Paginator.vue";
-import LemmiFilter from "./Component__Lemmi_filter.vue";
+import LemmiFilter from "./Component__Lemmi_Filter.vue";
 import LemmiSorter from "./Component__Lemmi_Sorter.vue";
 </script>

@@ -1,9 +1,9 @@
 <template>
   <div class="select is-medium">
     <select v-model="filtering">
-      <option :value="'letter tutto'">Tutto</option>
-      <option v-for="letter in letters" :key="letter" :value="`letter ${letter}`">
-        {{ letter }}
+      <option :value="'lemma tutto'">Tutto</option>
+      <option v-for="lemma in letters" :key="lemma" :value="`lemma ${lemma}`">
+        {{ lemma }}
       </option>
     </select>
   </div>
@@ -21,7 +21,7 @@ const filtering = computed({
   get: () => {
     if (lemmiStore.currentPage.metadata.filter_by)
       return `${lemmiStore.currentPage.metadata.filter_by} ${lemmiStore.currentPage.metadata.filter_value}`;
-    return "letter tutto";
+    return "lemma tutto";
   },
   set: async (newFiltering) => {
     const currentFiltering = `${lemmiStore.currentPage.metadata.filter_by} ${lemmiStore.currentPage.metadata.filter_value}`;
