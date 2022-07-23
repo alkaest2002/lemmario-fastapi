@@ -87,7 +87,6 @@ import { fetchWrapper } from "../utils__fetch";
 import { searchUrl, searchUrlTreccani } from "../utils__urls";
 
 import SearchLemmi from "./Components__Search_Lemmi.vue";
-import SearchTreccani from "./Components__Search_Treccani.vue";
 
 configure({
   validateOnBlur: false,
