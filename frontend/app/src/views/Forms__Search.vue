@@ -72,7 +72,11 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  "on-search-lemma": null,
+  "on-search-lemma": (value) => {
+    const c1 = Object.keys(value).every((key) => ["formData", "searchType", "setErrors"].includes(key));
+    const c2 = Object.keys(value.formData).every((key) => ["lemma", "exact"].includes(key));
+    return c1 && c2;
+  },
 });
 
 configure({
