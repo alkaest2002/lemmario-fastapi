@@ -20,7 +20,6 @@
 <script setup>
 import { computed } from "vue";
 import { useLemma } from "../composables__lemma";
-
 import LemmaCard from "./Component__Lemma_Card.vue";
 import LemmiNavigator from "./Component__Lemmi_Navigator.vue";
 

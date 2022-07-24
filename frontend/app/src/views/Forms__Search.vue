@@ -60,7 +60,6 @@
 
 <script setup>
 /* eslint-disable no-unused-vars */
-
 import { ref, watch, onMounted } from "vue";
 import { configure, Form, Field } from "vee-validate";
 import { boolean, object, string } from "yup";

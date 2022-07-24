@@ -1,7 +1,9 @@
 <template>
   <div>
-    <base-title>Modifica</base-title>
-    <forms-upsert
+    <base-title>{{
+      selectedLemma.rowid ? "Modifica" : "Inserisci"
+    }}</base-title>
+    <upsert-form
       :initial-values="cleanedSelectedLemma"
       :result-is-ready="resultIsReady"
       @on-upsert-lemma="onUpsertLemma"
@@ -10,20 +12,18 @@
       <template #upsertButtonLabel>
         {{ selectedLemma.rowid ? "Modifica" : "Inserisci" }}
       </template>
-    </forms-upsert>
+    </upsert-form>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
-
 import { useLemmiStore } from "../store__lemmi";
 import { fetchWrapper } from "../utils__fetch";
 import { insertUrl, editUrl, deleteUrl } from "../utils__urls";
 import { router } from "../router__main";
-
-import FormsUpsert from "./Forms__Upsert.vue";
+import UpsertForm from "./Forms__Upsert.vue";
 
 const lemmiStore = useLemmiStore();
 

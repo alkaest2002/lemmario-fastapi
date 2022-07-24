@@ -1,16 +1,12 @@
 <template>
   <div>
     <base-title>Login</base-title>
-    <login-form 
-      :result-is-ready="resultIsReady"
-      @on-login="onLogin"
-    />
+    <login-form :result-is-ready="resultIsReady" @on-login="onLogin" />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
 import { useAuthStore } from "../store__auth";
 import { router } from "../router__main";
 import LoginForm from "./Forms__Login.vue";

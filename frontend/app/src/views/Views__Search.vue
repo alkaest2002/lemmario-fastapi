@@ -8,19 +8,17 @@
     />
     <Suspense>
       <template #fallback>Attendere... </template>
-      <search-lemmi :lemmi="lemmi" :result-is-ready="resultIsReady" />
+      <search-list :lemmi="lemmi" :result-is-ready="resultIsReady" />
     </Suspense>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
 import { fetchWrapper } from "../utils__fetch";
 import { searchUrl, searchUrlTreccani } from "../utils__urls";
-
-import searchForm from "./Forms__Search.vue";
-import searchLemmi from "./Components__Search_Lemmi.vue";
+import SearchForm from "./Forms__Search.vue";
+import SearchList from "./Components__Search_List.vue";
 
 const { get } = fetchWrapper;
 
