@@ -68,6 +68,6 @@ async def update_lemma(*, lemma_id: int, lemma: LemmaSchema, db: Session = Depen
 	return lemmi_crud.update_lemma(lemma_id=lemma_id, lemma=lemma, db=db)
 
 
-@router.post("/delete/{lemma_id}")
+@router.delete("/delete/{lemma_id}")
 async def delete_lemma(*, lemma_id: int, db: Session = Depends(get_db)) -> LemmaModel:
 	return lemmi_crud.delete_lemma(lemma_id=lemma_id, db=db)
