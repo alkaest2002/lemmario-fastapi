@@ -89,7 +89,7 @@ const emit = defineEmits({
       ["formData", "setErrors"].includes(key)
     );
     const c2 = Object.keys(value.formData).every((key) =>
-      ["lemma", "definition"].includes(key)
+      ["rowid", "lemma", "definition"].includes(key)
     );
     return c1 && c2;
   },

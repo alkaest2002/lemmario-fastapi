@@ -2,8 +2,8 @@
   <div v-if="lemmi.length > 0" class="mt-5">
     <div class="is-flex is-flex-direction-column is-justify-content-center">
       <lemma-card
-        v-for="(lemma, index) of lemmi"
-        :key="index"
+        v-for="lemma of lemmi"
+        :key="lemma"
         :lemma="lemma"
         :selected-lemma="lemmiStore.currentSelectedLemma"
         @on-select-lemma="onSelectLemma"
