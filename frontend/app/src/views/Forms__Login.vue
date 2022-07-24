@@ -65,14 +65,18 @@ const props = defineProps({
 
   initialValues: {
     type: Object,
-    required: true
+    required: true,
   },
 });
 
 const emit = defineEmits({
   "on-login": (value) => {
-    const c1 = Object.keys(value).every((key) => ["formData", "setErrors"].includes(key));
-    const c2 = Object.keys(value.formData).every((key) => ["username", "password"].includes(key));
+    const c1 = Object.keys(value).every((key) =>
+      ["formData", "setErrors"].includes(key)
+    );
+    const c2 = Object.keys(value.formData).every((key) =>
+      ["username", "password"].includes(key)
+    );
     return c1 && c2;
   },
 });

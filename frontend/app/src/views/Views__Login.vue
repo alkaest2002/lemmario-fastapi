@@ -3,8 +3,8 @@
     <base-title>Login</base-title>
     <login-form
       :initial-values="formInitialValues()"
-      :result-is-ready="resultIsReady" 
-      @on-login="onLogin" 
+      :result-is-ready="resultIsReady"
+      @on-login="onLogin"
     />
   </div>
 </template>
@@ -20,8 +20,8 @@ const resultIsReady = ref(false);
 const formInitialValues = () => {
   return {
     username: import.meta.env.VITE_USERNAME,
-    password: import.meta.env.VITE_PASSWORD
-  }
+    password: import.meta.env.VITE_PASSWORD,
+  };
 };
 
 const onLogin = async ({ formData: { username, password }, setErrors }) => {

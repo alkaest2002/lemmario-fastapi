@@ -1,8 +1,8 @@
 <template>
   <div>
-    <base-title>{{
-      selectedLemma.rowid ? "Modifica" : "Inserisci"
-    }}</base-title>
+    <base-title>
+      {{ selectedLemma.rowid ? "Modifica" : "Inserisci" }}
+    </base-title>
     <upsert-form
       :initial-values="cleanedSelectedLemma"
       :result-is-ready="resultIsReady"

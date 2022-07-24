@@ -84,12 +84,16 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  "on-upsert-lemma":  (value) => {
-    const c1 = Object.keys(value).every((key) => ["formData", "setErrors"].includes(key));
-    const c2 = Object.keys(value.formData).every((key) => ["lemma", "definition"].includes(key));
+  "on-upsert-lemma": (value) => {
+    const c1 = Object.keys(value).every((key) =>
+      ["formData", "setErrors"].includes(key)
+    );
+    const c2 = Object.keys(value.formData).every((key) =>
+      ["lemma", "definition"].includes(key)
+    );
     return c1 && c2;
   },
-  "on-delete-lemma":  (value) => {
+  "on-delete-lemma": (value) => {
     return Object.keys(value).every((key) => ["setErrors"].includes(key));
   },
 });
