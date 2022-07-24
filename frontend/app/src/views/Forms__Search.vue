@@ -2,7 +2,7 @@
   <Form
     v-slot="{ errors, isSubmitting, values: { lemma } }"
     :validation-schema="validationSchema"
-    @submit="onSubmitForm"
+    @submit="onSearchLemma"
     @invalid-submit="onInvalidSubmitForm"
   >
     <div class="field">
@@ -73,7 +73,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  "on-submit-form": null,
+  "on-search-lemma": null,
 });
 
 configure({
@@ -92,12 +92,21 @@ const validationSchema = object().shape({
 
 const isLoading = ref(false);
 
+watch(
+  () => props.resultIsReady,
+  (value) => {
+    if (value) isLoading.value = false;
+  }
+);
+
 const searchType = ref("SearchLemmi");
 
-const onSubmitForm = async ({ lemma, exact }, { setErrors }) => {
-  emit("on-submit-form", {
-    lemma,
-    exact: exact || false,
+const onSearchLemma = async ({ lemma, exact }, { setErrors }) => {
+  emit("on-search-lemma", {
+    formData: {
+      lemma,
+      exact: exact || false,
+    },
     searchType: searchType.value,
     setErrors,
   });
@@ -106,13 +115,6 @@ const onSubmitForm = async ({ lemma, exact }, { setErrors }) => {
 const onInvalidSubmitForm = () => {
   isLoading.value = false;
 };
-
-watch(
-  () => props.resultIsReady,
-  (value) => {
-    if (value) isLoading.value = false;
-  }
-);
 
 onMounted(() => {
   const lemmaInput = document.getElementsByTagName("input")[0];

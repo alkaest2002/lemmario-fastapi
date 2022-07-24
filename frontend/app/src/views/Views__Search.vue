@@ -4,7 +4,7 @@
     <p class="mb-3">La ricerca produrrà un massimo di 20 risultati.</p>
     <search-form
       :result-is-ready="resultIsReady"
-      @on-submit-form="onSubmitForm"
+      @on-search-lemma="onSearchLemma"
     />
     <Suspense>
       <template #fallback>Attendere... </template>
@@ -28,16 +28,21 @@ const resultIsReady = ref(false);
 
 const lemmi = ref([]);
 
-const onSubmitForm = async ({ lemma, exact, searchType, setErrors }) => {
+const onSearchLemma = async ({
+  formData: { lemma, exact },
+  searchType,
+  setErrors,
+}) => {
   try {
     resultIsReady.value = false;
     const computedUrl =
       searchType == "SearchTreccani" ? searchUrlTreccani : searchUrl;
     const url = `${computedUrl}/${lemma}?${new URLSearchParams({ exact })}`;
     lemmi.value = await get(url);
-    resultIsReady.value = true;
   } catch (error) {
     setErrors({ apiError: error });
+  } finally {
+    resultIsReady.value = true;
   }
 };
 </script>

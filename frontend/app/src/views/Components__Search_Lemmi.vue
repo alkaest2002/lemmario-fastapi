@@ -17,7 +17,6 @@
 
 <script setup>
 /* eslint-disable no-unused-vars */
-
 import LemmaCard from "./Component__Lemma_Card.vue";
 import { useLemma } from "../composables__lemma";
 
