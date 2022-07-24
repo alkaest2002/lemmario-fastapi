@@ -1,7 +1,11 @@
 <template>
   <div>
     <base-title>Login</base-title>
-    <login-form :result-is-ready="resultIsReady" @on-login="onLogin" />
+    <login-form
+      :initial-values="formInitialValues()"
+      :result-is-ready="resultIsReady" 
+      @on-login="onLogin" 
+    />
   </div>
 </template>
 
@@ -12,6 +16,13 @@ import { router } from "../router__main";
 import LoginForm from "./Forms__Login.vue";
 
 const resultIsReady = ref(false);
+
+const formInitialValues = () => {
+  return {
+    username: import.meta.env.VITE_USERNAME,
+    password: import.meta.env.VITE_PASSWORD
+  }
+};
 
 const onLogin = async ({ formData: { username, password }, setErrors }) => {
   try {

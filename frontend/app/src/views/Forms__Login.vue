@@ -2,10 +2,7 @@
   <Form
     v-slot="{ errors, isSubmitting, values: { username, password } }"
     :validation-schema="validationSchema"
-    :initial-values="{
-      username: 'p.calanna@gmail.com',
-      password: '',
-    }"
+    :initial-values="initialValues"
     @submit="onSubmitForm"
   >
     <div class="field">
@@ -65,6 +62,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+
+  initialValues: {
+    type: Object,
+    required: true
+  },
 });
 
 const emit = defineEmits({
@@ -97,7 +99,7 @@ const onSubmitForm = async ({ username, password }, { setErrors }) => {
 };
 
 onMounted(() => {
-  const lemmaInput = document.getElementsByTagName("input")[0];
+  const lemmaInput = document.getElementsByTagName("button")[0];
   lemmaInput.focus();
 });
 </script>
