@@ -38,7 +38,7 @@
         :type="'submit'"
         :button-css="'is-medium is-info'"
         :disabled="isSubmitting || !lemma"
-        @click="searchType = 'SearchLemmi'"
+        @click="searchType = 'lemmi'"
       >
         Cerca
       </base-loading-button>
@@ -47,9 +47,18 @@
         :type="'submit'"
         :button-css="'is-medium is-warning'"
         :disabled="isSubmitting || !lemma"
-        @click="searchType = 'SearchTreccani'"
+        @click="searchType = 'treccani'"
       >
         Treccani
+      </base-loading-button>
+      <base-loading-button
+        v-model="isLoading"
+        :type="'submit'"
+        :button-css="'is-medium is-warning'"
+        :disabled="isSubmitting || !lemma"
+        @click="searchType = 'olivetti'"
+      >
+        Oilvetti
       </base-loading-button>
     </div>
     <div v-if="errors.apiError" class="has-text-danger mt-3 mb-0">

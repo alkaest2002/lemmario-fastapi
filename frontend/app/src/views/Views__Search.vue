@@ -16,7 +16,7 @@
 <script setup>
 import { ref } from "vue";
 import { fetchWrapper } from "../utils__fetch";
-import { searchUrl, searchUrlTreccani } from "../utils__urls";
+import { searchUrl, searchUrlTreccani, searchUrlOlivetti } from "../utils__urls";
 import SearchForm from "./Forms__Search.vue";
 import SearchList from "./Components__Search_List.vue";
 
@@ -26,6 +26,17 @@ const resultIsReady = ref(false);
 
 const lemmi = ref([]);
 
+const computeUrl = (searchType) => {
+  const urls = {
+    "lemmi": searchUrl,
+    "treccani": searchUrlTreccani,
+    "olivetti": searchUrlOlivetti
+  };
+  return Object.keys(urls).includes(searchType)
+    ? urls[searchType]
+    : urls["lemmi"];
+};
+
 const onSearchLemma = async ({
   formData: { lemma, exact },
   searchType,
@@ -33,8 +44,7 @@ const onSearchLemma = async ({
 }) => {
   try {
     resultIsReady.value = false;
-    const computedUrl =
-      searchType == "SearchTreccani" ? searchUrlTreccani : searchUrl;
+    const computedUrl = computeUrl(searchType)
     const url = `${computedUrl}/${lemma}?${new URLSearchParams({ exact })}`;
     lemmi.value = await get(url);
   } catch (error) {
