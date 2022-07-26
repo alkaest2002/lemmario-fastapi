@@ -1,16 +1,8 @@
-import re
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 from schemas__scrape import ScrapeSearchSchema
-
-
-def clean_text(lemma: str) -> str:
-  lemma = re.sub(r"\t", "", lemma)
-  lemma = re.sub(r"\n|\s{2,}", " ", lemma)
-  lemma = lemma.strip()
-  return lemma
-
+from utils import clean_text
 
 class HoepliScaprer():
 
@@ -39,6 +31,6 @@ class HoepliScaprer():
     lemma_element = soup.find("div", id="myth1")
     occurences = lemma_element.find_all("span", class_="italiano")
     if len(occurences) > 0:
-      processed_lemma = lemma_element.find("span", class_="lemma").getText()
-      return self._process_search_lemma(processed_lemma, occurences)
+      accented_lemma = lemma_element.find("span", class_="lemma").getText()
+      return self._process_search_lemma(accented_lemma, occurences)
     return []
