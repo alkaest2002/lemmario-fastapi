@@ -133,6 +133,6 @@ const onInvalidSubmitForm = () => {
 
 onMounted(() => {
   const el = document.getElementsByTagName("textarea")[0];
-  el.style.height = `${el.scrollHeight + 20}px`;
+  el.style.height = `${el.scrollHeight + 10}px`;
 });
 </script>
