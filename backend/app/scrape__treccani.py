@@ -2,7 +2,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-from schemas__lemmi import LemmaSearchSchema, LemmaLookupSchema
+from schemas__scrape import ScrapeSearchSchema
 
 
 def clean_text(lemma: str) -> str:
@@ -18,7 +18,7 @@ class TreccaniScaprer():
     self.lemma = lemma
     self.base_url = "https://www.treccani.it/vocabolario"
 
-  def _process_search_lemma(self, occurences: list[Tag]) -> str:
+  def _process_search_lemma(self, occurences: list[Tag]) -> list[ScrapeSearchSchema]:
     result = []
     for found_lemma in occurences:
       title_element = found_lemma.find("h2", class_="search_preview-title")
@@ -26,20 +26,10 @@ class TreccaniScaprer():
       lemma = clean_text(title_element.text).lower()
       definition = clean_text(abstract_element.getText())
       definition = re.sub("\s\.\.\.\sLeggi\sTutto", "", definition)
-      link = clean_text(abstract_element.find("a")["href"])
-      result.append(LemmaSearchSchema(
-          **dict(lemma=lemma, link=link, definition=definition)))
+      result.append(ScrapeSearchSchema(**dict(lemma=lemma, definition=definition)))
     return result
 
-  def _process_lookup_lemma(self, found_lemma: Tag) -> LemmaLookupSchema:
-    lemma = found_lemma.find("span", class_="tc-title").text
-    lemma = clean_text(lemma)
-    definition = " ".join([elm.get_text()
-                          for elm in found_lemma.findAll("p")[2:]])
-    definition = clean_text(definition)
-    return LemmaLookupSchema(lemma=lemma, definition=definition)
-
-  def search(self) -> list[LemmaSearchSchema]:
+  def search(self) -> list[ScrapeSearchSchema]:
     page = requests.get(f"{self.base_url}/ricerca/{self.lemma}/")
     soup = BeautifulSoup(page.content, "html.parser")
     occurences = soup.find("div", class_="treccani-container-left_container").find_all(
@@ -47,11 +37,3 @@ class TreccaniScaprer():
     if len(occurences) > 0:
         return self._process_search_lemma(occurences)
     return []
-
-  def lookup(self) -> list[LemmaLookupSchema]:
-    page = requests.get(f"{self.base_url}/{self.lemma}/")
-    soup = BeautifulSoup(page.content, "html.parser")
-    occurences = soup.find_all("div", class_="text spiega")
-    if len(occurences) == 0:
-      return []
-    return self._process_lookup_lemma(occurences[0])

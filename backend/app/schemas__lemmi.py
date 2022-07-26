@@ -16,7 +16,7 @@ class LemmaORMSchema(LemmaSchema):
 		orm_mode = True
 
 
-class LemmaSearchaMetadataSchema(BaseModel):
+class LemmaListMetadataSchema(BaseModel):
 	filter_by: FieldEnum | None = None
 	filter_value: str | None = None
 	order_by: FieldEnum | None = None
@@ -28,13 +28,4 @@ class LemmaSearchaMetadataSchema(BaseModel):
 
 class LemmaListSchema(BaseModel):
 	data: list[LemmaORMSchema]
-	metadata: LemmaSearchaMetadataSchema
-
-
-class LemmaLookupSchema(BaseModel):
-	lemma: str
-	definition: str
-
-
-class LemmaSearchSchema(LemmaLookupSchema):
-	link: str
+	metadata: LemmaListMetadataSchema
