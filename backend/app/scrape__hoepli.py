@@ -29,8 +29,8 @@ class HoepliScaprer():
     page = requests.get(f"{self.base_url}", params=dict(parola=self.lemma))
     soup = BeautifulSoup(page.content, "html.parser")
     lemma_element = soup.find("div", id="myth1")
-    occurences = lemma_element.find_all("span", class_="italiano")
-    if len(occurences) > 0:
+    if lemma_element:
+      occurences = lemma_element.find_all("span", class_="italiano")
       accented_lemma = lemma_element.find("span", class_="lemma").getText()
       return self._process_search_lemma(accented_lemma, occurences)
     return []
