@@ -4,7 +4,7 @@
     :disabled="lemmiStore.currentPageNumber == 1"
     @click.prevent="onClickNav('PREV')"
   >
-    Prec
+    &larr;
   </button>
   <button
     class="button is-info"
@@ -14,7 +14,7 @@
     "
     @click.prevent="onClickNav('NEXT')"
   >
-    Succ
+    &rarr;
   </button>
 </template>
 
@@ -39,7 +39,5 @@ const onClickNav = async (pageDirection) => {
 </script>
 
 <style lang="scss" scoped>
-button {
-  min-width: 90px;
-}
+
 </style>
