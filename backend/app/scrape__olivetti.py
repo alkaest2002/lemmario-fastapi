@@ -4,7 +4,7 @@ from bs4.element import Tag
 from schemas__scrape import ScrapeSearchSchema
 from utils import clean_text
 
-class HoepliScaprer():
+class OlivettiScaprer():
 
   def __init__(self, lemma: str):
     self.lemma = lemma
