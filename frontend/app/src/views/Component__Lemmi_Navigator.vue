@@ -11,5 +11,5 @@
 <script setup>
 import LemmiPaginator from "./Component__Lemmi_Paginator.vue";
 import LemmiDropdown from "./Component__Lemmi_Dropdown.vue";
-import LemmiSearch from "./Component__Lemmi_Search.vue"
+import LemmiSearch from "./Component__Lemmi_Search.vue";
 </script>
