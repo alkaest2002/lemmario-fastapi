@@ -32,11 +32,11 @@
         </div>
       </div>
     </div>
-    <div class="buttons">
+    <div class="buttons are-medium">
       <base-loading-button
         v-model="isLoading"
         :type="'submit'"
-        :button-css="'is-medium is-info'"
+        :button-css="'is-info'"
         :disabled="isSubmitting || !lemma"
         @click="searchType = 'lemmi'"
       >
@@ -45,7 +45,7 @@
       <base-loading-button
         v-model="isLoading"
         :type="'submit'"
-        :button-css="'is-medium is-warning'"
+        :button-css="'is-warning'"
         :disabled="isSubmitting || !lemma"
         @click="searchType = 'treccani'"
       >
@@ -54,9 +54,9 @@
       <base-loading-button
         v-model="isLoading"
         :type="'submit'"
-        :button-css="'is-medium is-warning'"
+        :button-css="'is-warning'"
         :disabled="isSubmitting || !lemma"
-        @click="searchType = 'olivetti'"
+        @click="searchType = 'treccani'"
       >
         Oilvetti
       </base-loading-button>

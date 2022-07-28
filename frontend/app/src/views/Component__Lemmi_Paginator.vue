@@ -37,7 +37,3 @@ const onClickNav = async (pageDirection) => {
   await lemmiStore.fetchLemmi();
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
